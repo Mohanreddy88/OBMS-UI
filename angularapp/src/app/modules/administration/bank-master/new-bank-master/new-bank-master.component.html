@@ -1,0 +1,81 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <h1 class="md-1">{{bankMasterTitle == 'new'?'New Bank Master': 'Edit Bank Master'}}</h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+                <ol class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Administration</a></li>
+                    <li class="breadcrumb-item"><a routerLink="/administration/bank-master">Bank Master List</a></li>
+                    <li class="breadcrumb-item active">{{bankMasterTitle == 'new'?'New Bank Master': 'Edit Bank Master'}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="bankMasterForm">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Bank</mat-label>
+                        <mat-select formControlName="BankCode" (selectionChange)="onBankCodeChange($event)">
+                            <mat-option *ngFor="let bank of bankList" [value]="bank.BankCode">
+                                {{ bank.BankCode }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-2">                   
+                    <mat-form-field appearance="outline">
+                        <mat-label>Bank Name</mat-label>
+                        <input matInput placeholder="Enter Bank Code" maxlength="5" formControlName="Accname">
+                      </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Bank Account No</mat-label>
+                        <input matInput placeholder="Enter Bank Name" formControlName="Accno">
+                      </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-2">                   
+                    <mat-form-field appearance="outline">
+                        <mat-label>Bank Branch</mat-label>
+                        <input matInput placeholder="" formControlName="AccShortName">
+                      </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Bank Prefix</mat-label>
+                        <input matInput placeholder="" formControlName="PREFIX" readonly="true">
+                      </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-right">
+                        <button class="btn wlt-c-furg-btn-gray mr-3" mat-dialog-close
+                            (click)="clearBankMasterDetails()"> Cancel</button>
+                        <button *ngIf="(this.userAccessModel.updateAccess == true || this.userAccessModel.createAccess == true || currentUser == 'superadmin')"
+                        class="btn wlt-c-furg-btn-primary" [disabled]="bankMasterForm.invalid" (click)="savebuttonClick()"> {{bankMasterForm.get('ID')?.value == 0 ? 'Save' : 'Update' }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+    style="margin-top: -10.5rem; display: block; margin-left: -6.5rem;">
+    <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+    </div>
+</div>
+<!-- model pop up for logic ended -->

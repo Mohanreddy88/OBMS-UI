@@ -1,0 +1,225 @@
+<div class="wlt-c-furg-content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <h1 class="mb-1"> Expenses</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+        <ol class="breadcrumb float-md-right">
+          <li class="breadcrumb-item"><a routerLink="/dashboard">Finance</a></li>
+          <li class="breadcrumb-item active">Expenses</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="frm" *ngIf="warningMessage ===''">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Branch</mat-label>
+            <mat-select formControlName="Branch">
+              <mat-option *ngFor="let d of branchList" value="{{d.Code}}">{{d.Code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Supplier</mat-label>
+            <mat-select formControlName="Supplier" (selectionChange)="supplierChange($event)">
+              <mat-option *ngFor="let d of supplierList" value="{{d.Id}}">{{d.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="ItemCategory" (selectionChange)="categoryChange()">
+              <mat-option *ngFor="let d of categoryList" value="{{d.ID}}">{{d.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 d-flex select-popup">
+          <mat-form-field appearance="outline" class="flex-grow-1">
+            <mat-label>Invoice No</mat-label>
+            <input type="text" formControlName="InvoiceNo" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+
+          <button type="button" class="btn btn-field-popup wide-button" matTooltip="Search Invoice"
+            (click)="searchinvoice()">
+            <span class="btn wlt-c-furg-btn-primary">Search<mat-icon>search</mat-icon> </span>
+          </button>
+        </div>
+        <div class="col-12 col-sm-12col-md-6 col-lg-6"></div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Invoice Date</mat-label>
+            <input type="text" formControlName="InvoiceDate" matInput [matDatepicker]="picker1"
+              (dateChange)="onInvoiceDateSelected($event)" placeholder="" autocomplete="off">
+            <mat-datepicker-toggle matSuffix [for]="picker1">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Payment Date</mat-label>
+            <input type="text" formControlName="PaymentDate" matInput [matDatepicker]="picker2"
+              (dateChange)="onPaymentDateSelected($event)" placeholder="" autocomplete="off">
+            <mat-datepicker-toggle matSuffix [for]="picker2">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6" hidden>
+          <mat-form-field appearance="outline">
+            <mat-label>Pay To</mat-label>
+            <mat-select formControlName="RecID">
+              <mat-option *ngFor="let d of supplierList" value="{{d.Id}}">{{d.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 wlt-c-furg-profile">
+          <h2><span>Detail Item</span></h2>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="table-responsive" formGroupName="details">
+          <table class="mat-table wlt-table wlt-new-agreement">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell text-center" colspan="2" style="width: 200px;">Bill Period</th>
+                <th class="mat-header-cell">Amount</th>
+                <th class="mat-header-cell">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row">
+                <td class="mat-cell" style="width: 20px;">
+                  <mat-form-field appearance="outline">
+                    <mat-label>From</mat-label>
+                    <input type="text" formControlName="InvoicePeriodFrom" matInput placeholder="" autocomplete="off"
+                      readonly>
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell" style="width: 20px;">
+                  <mat-form-field appearance="outline">
+                    <mat-label>To</mat-label>
+                    <input type="text" formControlName="InvoicePeriodTo" matInput placeholder="" autocomplete="off"
+                      readonly>
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell" style="width: 100px;">
+                  <mat-form-field appearance="outline">
+                    <input type="text" formControlName="Amount" matInput placeholder="" autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell" style="width: 400px;">
+                  <mat-form-field appearance="outline">
+                    <textarea type="text" formControlName="Note" matInput placeholder=""></textarea>
+                  </mat-form-field>
+                </td>
+              </tr>
+              <tr class="mat-row">
+                <th class="mat-cell">
+                  <span class="btn wlt-c-furg-btn-primary mr-3" mat-dialog-close
+                    (click)="addItemDetails('add')">Add</span>
+                  <span class="btn wlt-c-furg-btn-secondary mr-3" mat-dialog-close
+                    (click)="addItemDetails('update')">Update</span>
+                </th>
+                <th colspan="8">
+                  <mat-error>
+                    {{errorDescription}}
+                  </mat-error>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="table-responsive" *ngIf="errorMessage =='' && warningMessage ===''">
+            <table mat-table [dataSource]="dataSource" class="wlt-table table-striped" matSort>
+              <ng-container matColumnDef="SerialNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 60px;"> S.No</th>
+                <td mat-cell *matCellDef="let element" class="text-left" style="width: 60px;"> {{element.SerialNo}} </td>
+              </ng-container>
+              <ng-container matColumnDef="InvoicePeriodFrom">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 120px;"> Start Date</th>
+                <td mat-cell *matCellDef="let element" class="text-left" style="width: 120px;"> {{element.InvoicePeriodFrom |
+                  date:'dd-MMM-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="InvoicePeriodTo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 120px;"> End Date</th>
+                <td mat-cell *matCellDef="let element" class="text-left" style="width: 120px;"> {{element.InvoicePeriodTo |
+                  date:'dd-MMM-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Amount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 100px;"> Amount</th>
+                <td mat-cell *matCellDef="let element" class="text-left" style="width: 100px;"> {{element.Amount}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Note">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 200px;"> Note</th>
+                <td mat-cell *matCellDef="let element" class="text-left" style="width: 200px;"> {{element.Note}} </td>
+              </ng-container>
+              <ng-container matColumnDef="action" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef style="text-align:center; width: 120px;">
+                  Action
+                </th>
+                <td mat-cell *matCellDef="let row; let index = index" style="text-align:center;">
+                  <a *ngIf="this.userAccessModel.readAccess == true || currentUser == 'superadmin'"
+                    style="cursor:pointer;" class="wlt-c-furg-text-primary mr-2" matTooltip="View"
+                    (click)="editRow(row,index)">
+                    <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>
+                  </a>
+                  <a *ngIf="this.userAccessModel.deleteAccess == true || currentUser == 'superadmin'"
+                    style="cursor:pointer;" class="wlt-c-furg-text-danger" matTooltip="Delete"
+                    (click)="deleteRow(row,index)">
+                    <mat-icon aria-hidden="false" aria-label="trash icon">delete_outline</mat-icon>
+                  </a>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="text-right">
+            <button class="btn wlt-c-furg-btn-gray mr-2" mat-dialog-close> Cancel</button>
+            <button *ngIf="this.userAccessModel.deleteAccess == true  || currentUser =='superadmin'"
+              class="btn wlt-c-furg-btn-danger mr-2" (click)="deleteButtonClick()" [disabled]="invoiceID <= 0"> Delete</button>
+            <button
+              *ngIf="this.userAccessModel.createAccess == true || this.userAccessModel.updateAccess == true || currentUser =='superadmin'"
+              class="btn wlt-c-furg-btn-primary mr-2" (click)="onSubmit()"> {{ invoiceID > 0 ? 'Update' : 'Save' }}</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div *ngIf="warningMessage !==''">
+      <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+    </div>
+    <div *ngIf="errorMessage !==''">
+      <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+    </div>
+  </mat-card-content>
+</mat-card>
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+  style="margin-top: -20.5rem; display: block; margin-left: -6.5rem;">
+  <div class="d-flex justify-content-center">
+    <span class="loader"></span>
+  </div>
+</div>
+<!-- model pop up for logic ended -->

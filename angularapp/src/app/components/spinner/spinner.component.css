@@ -1,0 +1,30 @@
+.spinner-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: calc(100vh); */
+    height: 100vh;
+    position: fixed;
+    /* width: calc(100%); */
+    width: 100%;
+}
+@media (max-width: 991px) {
+    .spinner-wrapper {        
+      width: 100%;
+    }
+}
+.spinner-wrapper .donut {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+      border: 0.3rem solid rgba(#979fd0, 0.3);
+      border-top-color: #979fd0;
+      animation: 1.5s spin infinite linear;
+}
+
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }

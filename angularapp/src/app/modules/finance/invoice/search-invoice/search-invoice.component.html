@@ -1,0 +1,67 @@
+<p class="close" [mat-dialog-close]="true">
+  <mat-icon class="close-icon">close</mat-icon>
+</p>
+<h1 mat-dialog-title>Search Invoice</h1>
+<form [formGroup]="frm">
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <div class="text-right">
+          <mat-form-field appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-12 co-sm-12 col-md-8 col-lg-8">
+
+        <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="table-responsive my-3">
+          <table mat-table [dataSource]="dataSource" class="wlt-table table-striped" matSort
+            (matSortChange)="announceSortChange($event)">
+            <ng-container matColumnDef="s_no">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.s_no}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="invoice_no">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice No </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.invoice_no}} </td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.amount}} </td>
+            </ng-container>
+            <ng-container matColumnDef="invoice_date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Date </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.invoice_date}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="payment_date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Date </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.payment_date}} </td>
+            </ng-container>
+            <ng-container matColumnDef="action" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef style="text-align:center; width: 120px;">
+                Action
+              </th>
+              <td mat-cell *matCellDef="let row" style="text-align:center;">
+                <a style="cursor:pointer;" class="wlt-c-furg-text-primary mr-2" matTooltip="Select Employee"><mat-icon
+                    aria-hidden="false" aria-label="add icon">add</mat-icon></a>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </mat-dialog-content>
+</form>

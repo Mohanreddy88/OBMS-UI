@@ -1,0 +1,265 @@
+<div class="wlt-c-furg-content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <h1 class="mb-1"> Purchase Bills</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+        <ol class="breadcrumb float-md-right">
+          <li class="breadcrumb-item"><a routerLink="/dashboard">Inventory</a></li>
+          <li class="breadcrumb-item active">Purchase Bills</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="frm" (ngSubmit)="onSubmit()" *ngIf="warningMessage ===''">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Branch</mat-label>
+            <mat-select formControlName="Branch">
+              <mat-option *ngFor="let d of branchList" value="{{d.Code}}">{{d.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Supplier</mat-label>
+            <mat-select formControlName="Supplier">
+              <mat-option *ngFor="let d of supplierList" value="{{d.Id}}">{{d.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12col-md-3 col-lg-3 d-flex select-popup">
+          <mat-form-field appearance="outline">
+            <mat-label>Invoice No</mat-label>
+            <input type="text" formControlName="InvoiceNo" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+          <span class="btn btn-field-popup" matTooltip="Serach Invoice" (click)="searchinvoice()">
+            <mat-icon>search</mat-icon>
+          </span>
+        </div>
+        <div class="col-12 col-sm-12 col-md-3 col-lg-3"></div>
+        <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Invoice Date</mat-label>
+            <input type="text" formControlName="InvoiceDate" matInput [matDatepicker]="picker1" placeholder=""
+              autocomplete="off">
+            <mat-datepicker-toggle matSuffix [for]="picker1">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Payment Date</mat-label>
+            <input type="text" formControlName="PaymentDate" matInput [matDatepicker]="picker2" placeholder=""
+              autocomplete="off">
+            <mat-datepicker-toggle matSuffix [for]="picker2">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 wlt-c-furg-profile">
+          <h2><span>Detail Item</span></h2>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="table-responsive" formGroupName="details">
+          <table class="mat-table wlt-table wlt-new-agreement">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">Category</th>
+                <th class="mat-header-cell">Item</th>
+                <th class="mat-header-cell">Unit Price</th>
+                <th class="mat-header-cell">Unit</th>
+                <th class="mat-header-cell">Total</th>
+                <th class="mat-header-cell">Value Status</th>
+                <th class="mat-header-cell">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row">
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="ItemCategoryID" (selectionChange)="changeCategory()">
+                      <mat-option *ngFor="let d of categoryList" value="{{d.ID}}">{{d.Name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Item</mat-label>
+                    <mat-select formControlName="ItemID" (selectionChange)="itemChange($event.value)">
+                      <mat-option *ngFor="let d of itemList" value="{{d.ID}}">{{d.Name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline">
+                    <input type="text" formControlName="CostPerUnit" matInput placeholder="" autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline">
+                    <input type="text" formControlName="NoOfUnits" matInput placeholder="" autocomplete="off"
+                      (input)="dataCalculation()">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline">
+                    <input type="text" formControlName="Amount" matInput placeholder="" autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-radio-group aria-label="Select a value status" formControlName="ValueStatus">
+                    <mat-radio-button value="A">Appreciation</mat-radio-button>
+                    <mat-radio-button value="D">Depreciation</mat-radio-button>
+                  </mat-radio-group>
+                  <div class="row">
+                    <div class="col-6">
+                      <mat-form-field appearance="outline">
+                        <mat-label>%</mat-label>
+                        <input type="text" formControlName="ValuePercentage" matInput placeholder="" autocomplete="off">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                      <mat-form-field appearance="outline">
+                        <mat-label>(Months)</mat-label>
+                        <input type="text" formControlName="ValuePeriod" matInput placeholder="" autocomplete="off">
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline">
+                    <textarea type="text" formControlName="Note" matInput placeholder=""></textarea>
+                  </mat-form-field>
+                </td>
+              </tr>
+              <tr class="mat-row">
+                <th class="mat-cell" colspan="2">
+                  <button class="btn wlt-c-furg-btn-primary mr-3" mat-dialog-close
+                    (click)="addItemDetails('add')">Add</button>
+                  <button class="btn wlt-c-furg-btn-secondary mr-3" mat-dialog-close
+                    (click)="addItemDetails('update')">Update</button>
+                </th>
+                <th colspan="5">
+                  <mat-error>
+                    {{errorDescription}}
+                  </mat-error>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="table-responsive" *ngIf="errorMessage =='' && warningMessage ===''">
+            <table mat-table [dataSource]="dataSource" class="wlt-table table-striped" matSort>
+              <ng-container matColumnDef="SerialNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No</th>
+                <td mat-cell *matCellDef="let element;let index = index" class="text-left"> {{index + 1}} </td>
+              </ng-container>
+              <ng-container matColumnDef="ItemName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Item</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.ItemName}} </td>
+              </ng-container>
+              <ng-container matColumnDef="CostPerUnit">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Price</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.CostPerUnit}} </td>
+              </ng-container>
+              <ng-container matColumnDef="NoOfUnits">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Unit</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.NoOfUnits}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Amount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.Amount}} </td>
+              </ng-container>
+              <ng-container matColumnDef="ValueStatus">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>App/Dep</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.ValueStatus}} </td>
+              </ng-container>
+              <ng-container matColumnDef="ValuePeriod">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Period (Months)</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.ValuePeriod}} </td>
+              </ng-container>
+              <ng-container matColumnDef="ValuePercentage">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Percent</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.ValuePercentage}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Note">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Note</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.Note}} </td>
+              </ng-container>
+              <ng-container matColumnDef="action" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef style="text-align:center; width: 120px;">
+                  Action
+                </th>
+                <td mat-cell *matCellDef="let row; let index = index" style="text-align:center;">
+                  <a *ngIf="this.userAccessModel.readAccess == true || currentUser == 'superadmin'"
+                    style="cursor:pointer;" class="wlt-c-furg-text-primary mr-2" matTooltip="View"
+                    (click)="editRow(row,index)">
+                    <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>
+                  </a>
+                  <a *ngIf="this.userAccessModel.deleteAccess == true || currentUser == 'superadmin'"
+                    style="cursor:pointer;" class="wlt-c-furg-text-danger" matTooltip="Delete"
+                    (click)="deleteRow(row,index)">
+                    <mat-icon aria-hidden="false" aria-label="trash icon">delete_outline</mat-icon>
+                  </a>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row mt-3">
+          <div class="col-12">
+              <mat-form-field appearance="outline">
+                  <mat-label>Noted</mat-label>
+                  <textarea type="text" formControlName="noted" matInput placeholder=""></textarea>
+              </mat-form-field>
+          </div>
+      </div> -->
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="text-right">
+            <button class="btn wlt-c-furg-btn-gray mr-3" mat-dialog-close> Cancel</button>
+            <button
+              *ngIf="this.userAccessModel.createAccess == true || this.userAccessModel.updateAccess == true || currentUser == 'superadmin'"
+              class="btn wlt-c-furg-btn-primary"> Save</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div *ngIf="warningMessage !==''">
+      <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+    </div>
+    <div *ngIf="errorMessage !==''">
+      <mat-label style="color:red">{{errorMessage}}</mat-label>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+  style="margin-top: -20.5rem; display: block; margin-left: -6.5rem;">
+  <div class="d-flex justify-content-center">
+    <span class="loader"></span>
+  </div>
+</div>
+<!-- model pop up for logic ended -->

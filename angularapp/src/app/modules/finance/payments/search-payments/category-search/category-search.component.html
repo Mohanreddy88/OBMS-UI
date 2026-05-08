@@ -1,0 +1,114 @@
+<div class="wlt-c-furg-content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <h1 class="mb-1">Search Category</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+        <ol class="breadcrumb float-md-right">
+          <li class="breadcrumb-item"><a href="#">Finance</a></li>
+          <li class="breadcrumb-item"><a [routerLink]="['/finance/search-payments']">Search Payments</a></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<form [formGroup]="frm">
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Period From</mat-label>
+          <input type="text" formControlName="StartDate" matInput [matDatepicker]="picker1" placeholder=""
+            autocomplete="off">
+          <mat-datepicker-toggle matSuffix [for]="picker1">
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Period To</mat-label>
+          <input type="text" formControlName="EndDate" matInput [matDatepicker]="picker2" placeholder=""
+            autocomplete="off">
+          <mat-datepicker-toggle matSuffix [for]="picker2">
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="Category">
+            <mat-option *ngFor="let d of categoryList" value="{{d.ID}}">{{d.Name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <div class="btn-group" role="group">
+          <button type="submit" class="btn wlt-c-furg-btn-secondary m-1" (click)="seachCategory()">
+            Search</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <strong>Total Amount(RM): {{totalBranchPaymentsAmount}}</strong>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="table-responsive my-3">
+          <table mat-table [dataSource]="dataSource" class="wlt-table table-striped full-width-table" matSort
+            (matSortChange)="announceSortChange($event)">
+            <ng-container matColumnDef="voucher_no">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Voucher No</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.VoucherNo}} </td>
+            </ng-container>
+            <ng-container matColumnDef="payment_date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment Date</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.PaymentDate | date:'dd/MM/yyyy'}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="supplier_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Supplier Name </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.SupplierName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="bank_code">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Bank Code </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.BankCode}} </td>
+            </ng-container>
+            <ng-container matColumnDef="cheque_no">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Cheque No </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.ChequeNo}} </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="pay_to">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment To </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.PaymentTo}} </td>
+            </ng-container> -->
+            <ng-container matColumnDef="particulars">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Particulars </th>
+              <td mat-cell *matCellDef="let element" class="text-left" style="width: 50%;"> {{element.Particulars}} </td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.Amount}} </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="category_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Category Name </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.Category}} </td>
+            </ng-container> -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+
+      </div>
+    </div>
+    <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+      aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </mat-dialog-content>
+</form>

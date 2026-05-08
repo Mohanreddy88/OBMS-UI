@@ -1,0 +1,156 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <h1 class="md-1">{{miscTransTitleStatus == 'new'?'New Misc Transactions': 'Edit Misc Transactions'}}
+                </h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+                <ol class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Payroll</a></li>
+                    <li class="breadcrumb-item"><a routerLink="/payroll/misc-transactions">Misc Transactions List</a>
+                    </li>
+                    <li class="breadcrumb-item active">{{miscTransTitleStatus == 'new'?'New Misc Transactions': 'Edit
+                        Misc Transactions'}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="miscTransForm">
+            <div class="row" *ngIf="errorMessage !==''">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                    <mat-label style="color:red">{{errorMessage}}</mat-label>
+                </div>
+            </div>
+            <br />
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Trans Date</mat-label>
+                            <div style="display: flex; align-items: center;">
+                                <input matInput [matDatepicker]="picker" formControlName="TransDate"
+                                    (dateChange)="changeAdvanceDate('change', $event)">
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            </div>
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Branch Code</mat-label>
+                            <mat-select formControlName="BranchCode"
+                                (keydown)="onKeyDropdown($event, 'branchSearchString', 'branchModel', 'filteredBranchList', 'Code', branchSearchSubject)"
+                                [panelClass]="'custom-dropdown-panel'"
+                                (selectionChange)="onBranchSelectionChange($event)">
+                                <mat-option [value]="0"></mat-option>
+                                <mat-option *ngFor="let branch of branchModel" [value]="branch.Code">
+                                    {{ branch.Code }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-8">
+                        <mat-label class="mr-3"><strong>Type</strong></mat-label>
+                        <br />
+                        <mat-radio-group aria-label="Select a Type" formControlName="EmployeeType"
+                            (change)="radioButtonTypeSelectionChange($event)"
+                            class="d-flex flex-wrap align-items-center">
+                            <mat-radio-button value="Guard" class="mr-3 mb-2">Guard</mat-radio-button>
+                            <mat-radio-button value="Staff" class="mr-3 mb-2"
+                                [disabled]="!staffAdminAccessModel.readAccess">Staff</mat-radio-button>
+                            <mat-radio-button value="None" class="mr-3 mb-2">None</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee</mat-label>
+                    <mat-select formControlName="EmployeeID"
+                        (keydown)="onKeyDropdown($event, 'employeeSearchString', 'employeeListModel', 'filteredEmployeeList', 'EMP_NAME', employeeSearchSubject)"
+                        [panelClass]="'custom-dropdown-panel'">
+                        <mat-option *ngFor="let employee of employeeListModel" [value]="employee.EMP_ID">
+                            {{ employee.EMP_NAME }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-8">
+                        <mat-label class="mr-3"><strong>Trans Type</strong></mat-label>
+                        <br />
+                        <mat-radio-group aria-label="Select an option" formControlName="TransType">
+                            <mat-radio-button value="1" selected>Earnings</mat-radio-button>&nbsp;
+                            <mat-radio-button value="2">Deductions</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Amount </mat-label>
+                            <input type="text" formControlName="Amount" matInput placeholder="" autocomplete="off"
+                                pattern="^\d+(\.\d{1,2})?$">
+                            <mat-error *ngIf="miscTransForm.controls['Amount'].hasError('pattern')">
+                                Only numbers are allowed.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Particulars</mat-label>
+                            <input type="text" formControlName="Particulars" matInput placeholder="" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                        <mat-error *ngIf="miscTransForm.controls['Amount'].hasError('pattern')">
+                            Only numbers with up to two decimal places are allowed.
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-right">
+                        <button class="btn wlt-c-furg-btn-gray mr-3" mat-dialog-close (click)="clearMiscTransDetails()">
+                            Cancel</button>
+                        <!-- <button
+                            *ngIf="(this.userAccessModel.updateAccess == true || this.userAccessModel.createAccess == true || currentUser == 'superadmin')"
+                            class="btn wlt-c-furg-btn-primary"
+                            [disabled]="miscTransForm.invalid || miscTransForm.get('BranchCode')?.value === 0"
+                            (click)="savebuttonClick()"> {{miscTransForm.get('ID')?.value === 0 ? 'Save' : 'Update'
+                            }}</button> -->
+                        <button *ngIf="canSaveEmployee()" class="btn wlt-c-furg-btn-primary"
+                            (click)="savebuttonClick()">
+                            {{miscTransForm.get('ID')?.value === 0 ? 'Save' : 'Update'}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div *ngIf="warningMessage !==''">
+            <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+    style="margin-top: -10.5rem; display: block; margin-left: -6.5rem;">
+    <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+    </div>
+</div>
+<!-- model pop up for logic ended -->

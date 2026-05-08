@@ -1,0 +1,268 @@
+<div class="wlt-c-furg-content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <h1 class="mb-1">{{salaryTitleStatus == 'new'?'New Salary Slab': 'Edit Salary Slab'}}</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+        <ol class="breadcrumb float-md-right">
+          <li class="breadcrumb-item"><a routerLink="/dashboard">Master</a></li>
+          <li class="breadcrumb-item"><a routerLink="/master/salary-slab">Salary Slab List</a></li>
+          <li class="breadcrumb-item active">{{salaryTitleStatus == 'new'?'New Salary Slab': 'Edit Salary Slab'}}</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="salaryForm">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4" hidden>
+          <mat-form-field appearance="outline">
+            <mat-label>Branch</mat-label>
+            <mat-select formControlName="BranchCode">
+              <mat-option *ngFor="let branch of branchModel" [value]="branch.Code">
+                {{ branch.Code }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+          <mat-label class="mr-3"><strong>Employee Type</strong></mat-label><br />
+          <mat-radio-group aria-label="Select a Type" formControlName="EmployeeType">
+            <mat-radio-button value="Guard" (change)="employeeSelectionChanged($event)">Guard</mat-radio-button>
+            <mat-radio-button value="Staff" (change)="employeeSelectionChanged($event)">Staff</mat-radio-button>
+            <mat-radio-button value="None" (change)="employeeSelectionChanged($event)" hidden>None</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4" hidden>
+          <mat-label class="mr-3"><strong>Employee Nationality</strong></mat-label><br />
+          <mat-radio-group aria-label="Select a Nationality" formControlName="EmployeeNationality">
+            <mat-radio-button [disabled]="radioEmployeeType == 'None' || radioEmployeeType == 'Staff'" value="L"
+              (change)="nationalitySelectionChanged($event)">Local</mat-radio-button>
+            <mat-radio-button [disabled]="radioEmployeeType == 'None' || radioEmployeeType == 'Staff'" value="F"
+              (change)="nationalitySelectionChanged($event)">Foreigner</mat-radio-button>
+            <!-- <mat-radio-button value="None">None</mat-radio-button> -->
+          </mat-radio-group>
+        </div>
+      </div>
+      <br />
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Slab</mat-label>
+            <input type="text" formControlName="Name" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-1">
+          <mat-form-field appearance="outline">
+            <mat-label>Default Working Days</mat-label>
+            <input type="number" formControlName="ActualDays" matInput placeholder="" autocomplete="off" readonly
+              (change)="actualDaysChange($event)">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4" hidden>
+          <mat-checkbox formControlName="EICC" (change)="onCheckboxChange($event)">EICC</mat-checkbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-4 col-lg-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Actual Working Days</mat-label>
+            <input type="number" formControlName="WorkingDays" matInput placeholder="" autocomplete="off"
+              (change)="actualWorkingDaysChange($event)" (input)="onInput($event,'WorkingDays')" pattern="[0-9]*">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Base Salary</mat-label>
+            <input type="number" formControlName="SalaryBand" matInput placeholder="" autocomplete="off"
+              (change)="salaryBandChange($event)" pattern="^\d+(\.\d{1,2})?$">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 wlt-c-furg-profile">
+          <h2><span>Day Rate</span></h2>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline">
+                <mat-label>General Day Rate </mat-label>
+                <input type="number" formControlName="GeneralDayRate" matInput placeholder="" autocomplete="off"
+                  (change)="generalDayRateChange($event)" pattern="^\d+(\.\d{1,2})?$">
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-1">
+              <mat-label class="mr-9"><strong>for</strong></mat-label>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-1" style="margin-left: -80px;">
+              <mat-form-field appearance="outline">
+                <mat-label>For Hours</mat-label>
+                <input type="number" formControlName="GeneralDayHours" matInput placeholder="" autocomplete="off"
+                  (change)="generalDayRateHoursChange($event)">
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-5">
+              <mat-label style="color: red;">*Please enter General Day Rate only two digits after decimal
+                point</mat-label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Off Day Rate</mat-label>
+                <input type="number" formControlName="OffDayRate" matInput placeholder="" autocomplete="off"
+                  (change)="offDayRateChange($event)">
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline">
+                <input type="number" formControlName="OffDayAmount" matInput placeholder="" readonly autocomplete="off"
+                  pattern="^\d+(\.\d{1,2})?$">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Public Holiday Rate</mat-label>
+                <input type="number" formControlName="HolidayRate" matInput placeholder="" autocomplete="off"
+                  (change)="publicHolidayRateChange($event)">
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline">
+                <input type="number" formControlName="HolidayAmount" matInput placeholder="" readonly autocomplete="off"
+                  pattern="^\d+(\.\d{1,2})?$">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 wlt-c-furg-profile">
+          <h2><span>Over Time</span></h2>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Working Hours</mat-label>
+            <input type="number" formControlName="WorkingHours" matInput placeholder="" autocomplete="off"
+              (change)="workingHoursChange($event)">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-6">
+          <mat-label style="color: red;">Note: Please enter only two digits after decimal point for all OT</mat-label>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline">
+                <mat-label>General Day Over Time Rate</mat-label>
+                <input type="number" formControlName="GeneralDayOTRate" matInput placeholder="" autocomplete="off"
+                  (change)="generalDayOverTimeRateChange($event)" maxlength="4" pattern="^\d+(\.\d{1,2})?$">
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Per Hour</mat-label>
+                <input type="number" formControlName="GeneralDayOTAmount" matInput placeholder="" autocomplete="off"
+                  readonly pattern="[0-9]*\.?[0-9]{0,2}">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Off Day Over Time Rate</mat-label>
+                <input type="number" formControlName="OffDayOTRate" matInput placeholder="" autocomplete="off"
+                  (change)="offDayOverTimeRateChange($event)" maxlength="4" pattern="^\d+(\.\d{1,2})?$">
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Per Hour</mat-label>
+                <input type="number" pattern="[0-9]*\.?[0-9]{0,2}" formControlName="OffDayOTAmount" matInput readonly
+                  placeholder="" autocomplete="off">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Public Holiday Over Time Rate</mat-label>
+                <input type="number" formControlName="HolidayOTRate" matInput placeholder="" autocomplete="off"
+                  (change)="publicHoliDayOverTimeRateChange($event)" maxlength="4" pattern="^\d+(\.\d{1,2})?$">
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Per Hour</mat-label>
+                <input type="number" pattern="[0-9]*\.?[0-9]{0,2}" formControlName="HolidayOTAmount" matInput readonly
+                  placeholder="" autocomplete="off">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2" [hidden]="radioEmployeeType === 'Staff'">
+          <mat-form-field appearance="outline">
+            <mat-label>Travel Allowance</mat-label>
+            <input type="text" formControlName="TravelAllowance" matInput placeholder="" autocomplete="off"
+              pattern="^\d+(\.\d{1,2})?$" readonly>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-2">
+          <mat-label class="mr-3"><strong>Status</strong></mat-label><br />
+          <mat-radio-group aria-label="Select a Status" formControlName="Status">
+            <mat-radio-button value="Active">Active</mat-radio-button>
+            <mat-radio-button value="Inactive">Inactive</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4" hidden>
+          <mat-label class="mr-3"><strong>View Status</strong></mat-label><br />
+          <mat-radio-group aria-label="Select a View Status" formControlName="Active">
+            <mat-radio-button value="Active">Active</mat-radio-button>
+            <mat-radio-button value="Inactive">Inactive</mat-radio-button>
+            <mat-radio-button value="None">None</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="text-right">
+            <button class="btn wlt-c-furg-btn-gray mr-3" mat-dialog-close (click)="clearSalaryDetails()">
+              Cancel</button>
+            <button
+              *ngIf="(this.userAccessModel.createAccess == true || this.userAccessModel.updateAccess == true || currentUser== 'superadmin')"
+              class="btn wlt-c-furg-btn-primary" (click)="saveSalary()" [disabled]="salaryForm.invalid">
+              {{ salaryForm.value.SalaryId > 0 ? 'Update' : 'Save' }} </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+  style="margin-top: -20.5rem; display: block; margin-left: -6.5rem;">
+  <div class="d-flex justify-content-center">
+    <span class="loader"></span>
+  </div>
+</div>
+<!-- model pop up for logic ended -->

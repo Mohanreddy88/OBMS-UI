@@ -1,0 +1,11 @@
+.button-group {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Optional: Add margin between buttons */
+.button-group button { 
+    height: 40px;;
+    margin-right: 25px; 
+    white-space: nowrap; 
+}

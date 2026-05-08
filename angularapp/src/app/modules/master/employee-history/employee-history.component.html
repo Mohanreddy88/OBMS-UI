@@ -1,0 +1,106 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <h1 class="mb-1">Search Employee History</h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+                <ol class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Master</a></li>
+                    <li class="breadcrumb-item active">Employee History</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="frm">
+            <mat-dialog-content>
+                <div class="row" *ngIf="warningMessage ===''">
+                    <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                        <div class="text-right">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Branch</mat-label>
+                                <mat-select formControlName="BranchCode"
+                                    (keydown)="onKeyDropdown($event, 'branchSearchString', 'branchList', 'filteredBranchList', 'Code', branchSearchSubject)"
+                                    (selectionChange)="branchChange($event.value)"
+                                    [panelClass]="'custom-dropdown-panel'">
+                                    <mat-option [value]="" class="highlight-option"></mat-option>
+                                    <mat-option *ngFor="let d of branchList" value="{{d.Code}}">{{d.Code}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                        <div class="text-right">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Search</mat-label>
+                                <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="warningMessage ===''">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="table-responsive my-3">
+                            <table mat-table [dataSource]="dataSource" class="wlt-table table-striped" matSort
+                                (matSortChange)="announceSortChange($event)">
+                                <ng-container matColumnDef="EMP_CODE">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee No</th>
+                                    <td mat-cell *matCellDef="let element" class="text-left"> {{element.EMP_CODE}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="EMP_NAME">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name [Joined Date]</th>
+                                    <td mat-cell *matCellDef="let element" class="text-left">
+                                        {{ element.EMP_NAME }}
+                                        <span *ngIf="element.EMPPAY_DATE_JOINED">[{{ element.EMPPAY_DATE_JOINED |
+                                            date:'yyyy/MM/dd' }}]</span>
+                                    </td>
+
+                                </ng-container>
+                                <ng-container matColumnDef="HasTransfered">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Has Transfered</th>
+                                    <td mat-cell *matCellDef="let element" class="text-left"> {{element.HasTransfered}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="TransferDate">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Transfer Date</th>
+                                    <td mat-cell *matCellDef="let element" class="text-left"> {{element.TransferDate |
+                                        date:'yyyy-MM-dd'}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="EMP_ROLE">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> EMP ROLE</th>
+                                    <td mat-cell *matCellDef="let element" class="text-left"> {{element.EMP_ROLE}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="EMP_BRANCH_CODE">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Current Branch</th>
+                                    <td mat-cell *matCellDef="let element" class="text-left">
+                                        {{element.EMP_BRANCH_CODE}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="OldBranch">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Old Branch</th>
+                                    <td mat-cell *matCellDef="let element" class="text-left"> {{element.OldBranch}}
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <div *ngIf="warningMessage !==''">
+                    <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+                </div>
+                <div *ngIf="errorMessage !==''">
+                    <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+                </div>
+                <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </mat-dialog-content>
+        </form>
+    </mat-card-content>
+</mat-card>

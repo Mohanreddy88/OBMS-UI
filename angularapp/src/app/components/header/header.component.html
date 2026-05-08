@@ -1,0 +1,70 @@
+<nav class="navbar fixed-top flex-md-nowrap p-0 wlt-c-furg-navbar ml-sm-auto">
+  <div class="navbar-menu-wrapper d-flex align-items-top">
+    <button type="button" onclick="sidebartoggle()" class="navbar-toggler align-self-center">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <ul class="navbar-nav px-3 ms-auto wlt-c-furg-navbar-nav">     
+      <li class="nav-item">
+        <a class="nav-link" (click)="toggleSubmenu('home')" routerLink="/dashboard" routerLinkActive="active">
+          <span class="material-symbols-rounded">home</span> Home
+        </a>
+      </li>
+      <li class="nav-item" (click)="toggleSubmenu('master')" >
+        <a class="nav-link" data-toggle="collapse" data-target="#Master" routerLinkActive="active">
+          <span class="material-symbols-rounded">settings</span> Master
+        </a>
+      </li>
+      <li class="nav-item" (click)="toggleSubmenu('quotation')">
+        <a class="nav-link" data-toggle="collapse" data-target="#Quotation" routerLinkActive="active">
+          <span class="material-symbols-rounded">receipt_long</span> Quotation & Agreement
+        </a>
+      </li>
+      <li class="nav-item" (click)="toggleSubmenu('inventory')">
+        <a class="nav-link" data-toggle="collapse" data-target="#Inventory" routerLinkActive="active">
+          <span class="material-symbols-rounded">trolley</span> Inventory
+        </a>
+      </li>
+      <li class="nav-item" (click)="toggleSubmenu('finance')">
+        <a class="nav-link"  data-toggle="collapse" data-target="#Finance" routerLinkActive="active">
+          <span class="material-symbols-rounded">wallet</span> Finance
+        </a>
+      </li>
+      <li class="nav-item" (click)="toggleSubmenu('payroll')">
+        <a class="nav-link"  data-toggle="collapse" data-target="#Payroll" routerLinkActive="active">
+          <span class="material-symbols-rounded">attach_money</span> Payroll
+        </a>
+      </li>
+      <li class="nav-item" (click)="toggleSubmenu('administration')">
+        <a class="nav-link"  data-toggle="collapse" data-target="#Administration" routerLinkActive="active">
+          <span class="material-symbols-rounded">shield_person</span> Administration
+        </a>
+      </li>
+      <li class="nav-item" (click)="toggleSubmenu('accounting')">
+        <a class="nav-link"  data-toggle="collapse" data-target="#Accounting" routerLinkActive="active">
+          <span class="material-symbols-rounded">account_balance</span> Accounting
+        </a>
+      </li>
+      <!-- <li class="text-nowrap">       
+        <a class="wlt-c-furg-date-time">{{ dateTime | date }}, {{ time | date: 'hh:mm:ss a' }}</a>          
+      </li> -->
+      <li class="wlt-c-furg-dropdown text-nowrap">
+        <a class="wlt-c-furg-dropbtn wlt-c-furg-welcome-text" href="#" (click)="logout()">
+          <span class="user-icon-text">
+            <mat-icon class="user-icon">account_circle</mat-icon>
+            <b class="user-name">{{currentUser | uppercase}}</b>
+          </span>
+        </a>
+         <ul class="wlt-c-furg-dropdown-content">
+          <li>
+            <a  routerLink="/changepassword"><mat-icon class="mr-3">manage_accounts</mat-icon> Change Password</a>
+          </li>
+          <li>
+            <a href="#" (click)="logout()"><mat-icon class="mr-3">logout</mat-icon> Log Out</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+

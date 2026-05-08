@@ -1,0 +1,248 @@
+<div class="wlt-c-furg-content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <h1 class="mb-1">Payments</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+        <ol class="breadcrumb float-md-right">
+           <li class="breadcrumb-item"><a routerLink="/dashboard">Finance</a></li>
+          <li class="breadcrumb-item"><a routerLink="/finance/search-payments">Search Payments</a></li>
+          <li class="breadcrumb-item active">Payments</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="frm" *ngIf="warningMessage ===''">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Payment Date</mat-label>
+            <input type="text" formControlName="PaymentDate" matInput [matDatepicker]="picker1" placeholder=""
+              autocomplete="off">
+            <mat-datepicker-toggle matSuffix [for]="picker1">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+          <mat-label class="mr-3"><strong>Creditor Type</strong></mat-label><br />
+          <mat-radio-group aria-label="Select a Creditor Type " formControlName="CreditorType"
+            (change)="creditorChange($event?.value)">
+            <mat-radio-button value="1">Suppliers</mat-radio-button>
+            <mat-radio-button value="2">Others</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Supplier</mat-label>
+            <mat-select formControlName="Supplier" (selectionChange)="supplierChange($event.value)">
+              <mat-option *ngFor="let d of supplierList" [value]="d.Id">{{d.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+          <mat-label class="mr-3"><strong>Payment Type</strong></mat-label><br />
+          <mat-radio-group aria-label="Select a Payment Type " formControlName="PaymentType"
+            (change)="paymentTypeChange($event.value)">
+            <mat-radio-button value="1">Cheque</mat-radio-button>
+            <mat-radio-button value="2">Cash</mat-radio-button>
+            <mat-radio-button value="3">Contra</mat-radio-button>
+            <mat-radio-button value="4">Online Fund Transfer</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6" hidden>
+          <mat-label class="mr-3"><strong>Purpose</strong></mat-label><br />
+          <div *ngFor="let item of checklistItems">
+            <mat-checkbox [formControlName]="'purposeListItem_' + item.value">
+              {{ item.label }}
+            </mat-checkbox>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6"></div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Bank Account</mat-label>
+            <mat-select formControlName="BankID" (selectionChange)="bankSelectionChange($event.value)"
+              [disabled]="selectedPaymentType == '2' || selectedPaymentType == '3'">
+              <mat-option *ngFor="let d of bankList" [value]="d.BankId">{{d.Accname}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>{{paymentTypeDisplay}}</mat-label>
+            <input type="text" formControlName="ChequeNo" matInput placeholder="" autocomplete="off">
+            <mat-hint class="cheque-hint">Remaining Cheques in Cheque Book {{lblNoOfCheques}}</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4" hidden>
+          <mat-form-field appearance="outline">
+            <mat-label>Cheque Status</mat-label>
+            <input type="text" formControlName="cheque_status" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Payment To</mat-label>
+            <input type="text" formControlName="PaymentToD" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3"></div>
+
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3 mt-3">
+          <mat-label class="mr-3"><strong>Category Type</strong></mat-label><br />
+          <mat-radio-group aria-label="Select a Category Type " formControlName="category_type"
+            (change)="categoryChange($event.value)">
+            <mat-radio-button value="P">Purchase</mat-radio-button>
+            <mat-radio-button value="U">Expenses</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3 mt-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="ItemCategory"
+              (selectionChange)="GetPaymentMasterCategoryTypeChangePayTo($event.value)">
+              <mat-option *ngFor="let d of categoryList" value="{{d.ID}}">{{d.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4 mt-3" hidden>
+          <mat-form-field appearance="outline">
+            <mat-label>Pay To</mat-label>
+            <mat-select formControlName="PaymentTo">
+              <mat-option *ngFor="let d of payToList" value="{{d.ID}}">{{d.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3 mt-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Particulars</mat-label>
+            <input type="text" formControlName="Particulars" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-12" *ngIf="!isSupplierEnable">
+        <div class="table-responsive">
+          <table mat-table [dataSource]="branchAmountTable()" class="wlt-table wlt-new-agreement table-striped"
+            formArrayName="branchAmount">
+
+            <ng-container matColumnDef="BankName">
+              <th mat-header-cell *matHeaderCellDef>Branch</th>
+              <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+                <input type="text" matInput placeholder="" value="" formControlName="Name" readonly />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Amount">
+              <th mat-header-cell *matHeaderCellDef>Amount</th>
+              <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+                <mat-form-field appearance="outline">
+                  <input type="text" matInput placeholder="" value="" formControlName="Amount" />
+                </mat-form-field>
+              </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="border: 1px;"></tr>
+          </table>
+
+        </div>
+      </div>
+      <!--after search clik edit iocn in search result comes below table-->
+      <div class="col-12" *ngIf="isSupplierEnable">
+        <div class="table-responsive" *ngIf="showDataSourceTable == true">
+          <table mat-table [dataSource]="supplierInvoiceTable()" class="wlt-table wlt-new-agreement table-striped"
+            formArrayName="SupplierInvoice">
+
+            <ng-container matColumnDef="InvoiceNo">
+              <th mat-header-cell *matHeaderCellDef>Invoice No</th>
+              <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+                <input type="text" matInput placeholder="" value="" formControlName="InvoiceNo" readonly />
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="PaidAmount">
+              <th mat-header-cell *matHeaderCellDef>Paid Amount</th>
+              <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+                <input type="text" matInput placeholder="" value="" formControlName="PaidAmount" readonly />
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="CurrentPayment">
+              <th mat-header-cell *matHeaderCellDef>Current Payment</th>
+              <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+                <mat-form-field appearance="outline">
+                  <input type="text" matInput placeholder="" value="" formControlName="Amount"/>
+                     <!-- /> (input)="validatePayments()" -->
+                </mat-form-field>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Balance">
+              <th mat-header-cell *matHeaderCellDef>Balance</th>
+              <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index"                
+              >
+                <input type="text" matInput placeholder="" value="" formControlName="Balance" readonly />
+              </td>
+            </ng-container>
+
+            <!-- [style.background-color]="
+                  (element.get('Amount')?.value || 0) >
+                  ((element.get('Balance')?.value || 0) > (element.get('PaidAmount')?.value || 0)
+                    ? (element.get('Balance')?.value || 0)
+                    : (element.get('PaidAmount')?.value || 0))
+                    ? 'rgb(165, 42, 42)'
+                    : ''
+                " -->
+
+            <ng-container matColumnDef="BranchName">
+              <th mat-header-cell *matHeaderCellDef>Branch</th>
+              <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+                <input type="text" matInput placeholder="" value="" formControlName="Name" readonly />
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsSupplier"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsSupplier;" style="border: 1px;"></tr>
+          </table>
+        </div>
+      </div>
+      <br />
+      <div class="row">
+        <div class="col-12">
+          <div class="text-right">
+            <button class="btn wlt-c-furg-btn-gray mr-3" (click)="cancelButtonClick()" mat-dialog-close> Cancel</button>
+            <button class="btn btn-delete mr-3"
+              *ngIf="this.userAccessModel.deleteAccess == true || currentUser == 'superadmin'"
+              (click)="deleteClickButton()" [disabled]="paymentID == 0"> Delete</button>
+            <button class="btn btn-print mr-3" [disabled]="paymentID == 0" (click)="onPrint()">Print</button>
+            <button type="submit"
+              *ngIf="this.userAccessModel.createAccess == true ||this.userAccessModel.updateAccess == true || currentUser == 'superadmin'"
+              class="btn wlt-c-furg-btn-primary" [disabled]="hasInvalidPayment" (click)="onSubmit()"> {{ paymentID > 0 ?
+              'Update' : 'Save' }}</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div *ngIf="warningMessage !==''">
+      <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+    </div>
+    <div *ngIf="errorMessage !==''">
+      <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+  style="margin-top: -30.5rem; display: block; margin-left: -6.5rem;">
+  <div class="d-flex justify-content-center">
+    <span class="loader"></span>
+  </div>
+</div>
+<!-- model pop up for logic ended -->

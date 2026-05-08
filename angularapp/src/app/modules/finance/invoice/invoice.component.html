@@ -1,0 +1,159 @@
+<div class="wlt-c-furg-content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <h1 class="mb-1">Invoice</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+        <ol class="breadcrumb float-md-right">
+           <li class="breadcrumb-item"><a routerLink="/dashboard">Finance</a></li>
+          <li class="breadcrumb-item active">Invoice</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-card>
+  <mat-card-content>
+    <div *ngIf="warningMessage !==''">
+      <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+    </div>
+    <div *ngIf="errorMessage !==''">
+      <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+    </div>
+    <br />
+    <form [formGroup]="frm" (ngSubmit)="onSubmit()" *ngIf="warningMessage ==''">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Invoice Period</mat-label>
+            <input type="text" formControlName="invoice_period" matInput [matDatepicker]="picker1"
+              (dateChange)="getClients()" placeholder="" autocomplete="off">
+            <mat-datepicker-toggle matSuffix [for]="picker1">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Branch</mat-label>
+            <mat-select formControlName="branch" (selectionChange)="getClients()">
+              <mat-option *ngFor="let d of branchList" value="{{d.Code}}">{{d.Code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Invoice No.</mat-label>
+            <input type="text" formControlName="invoice_no" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" class="wlt-table table-striped" matSort
+              (matSortChange)="announceSortChange($event)">
+              <ng-container matColumnDef="actions" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef style="text-align:center; width: 120px;">
+                  Actions
+                </th>
+                <td mat-cell *matCellDef="let element" style="text-align:center;">
+                  <a *ngIf="element.ID == 0 " style="cursor:pointer;" class="wlt-c-furg-text-primary mr-2"
+                    (click)="getAgreement(element)" matTooltip="Edit">
+                    <mat-icon aria-hidden="false" aria-label="edit icon">edit
+                    </mat-icon>
+                  </a>
+                  <!-- <a style="cursor:pointer;" class="wlt-c-furg-text-success mr-2" matTooltip="View"><mat-icon aria-hidden="false" aria-label="view icon">visibility</mat-icon></a> -->
+                  <a *ngIf="element.ID != 0 " style="cursor:pointer;" class="wlt-c-furg-text-danger"
+                    (click)="getClientInvoiceById(element)" matTooltip="save">
+                    <mat-icon aria-hidden="false" aria-label="save icon">save
+                    </mat-icon>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="Name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Client Name</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.Name}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Info</mat-label>
+            <input type="text" formControlName="info" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 wlt-c-furg-profile">
+          <h2><span>Charges</span></h2>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Service Charge</mat-label>
+            <input type="text" formControlName="service_charge" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Discount</mat-label>
+            <input type="text" formControlName="discount" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Tax</mat-label>
+            <input type="text" formControlName="tax" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Total</mat-label>
+            <input type="text" formControlName="total" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Note</mat-label>
+            <textarea formControlName="note" matInput placeholder=""></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="text-right">
+            <a class="btn wlt-c-furg-btn-gray mr-3"> Cancel</a>
+            <a *ngIf="userAccessModel.readAccess || currentUser === 'superadmin'"
+              class="btn wlt-c-furg-btn-secondary mr-3" [class.disabled]="invoiceId === 0" (click)="onPrint()">Print</a>
+
+            <a *ngIf="userAccessModel.deleteAccess || currentUser === 'superadmin'"
+              class="btn wlt-c-furg-btn-secondary mr-3" [class.disabled]="invoiceId === 0"
+              (click)="deleteInvoice()">Delete</a>
+
+            <a *ngIf="this.userAccessModel.updateAccess == true || currentUser == 'superadmin'"
+              class="btn wlt-c-furg-btn-secondary mr-3" (click)="editInvoice()" [class.disabled]="btnEditDisabled">
+              Edit</a>
+            <button
+              *ngIf="this.userAccessModel.createAccess == true ||this.userAccessModel.updateAccess == true || currentUser == 'superadmin'"
+              class="btn wlt-c-furg-btn-primary" type="submit" [class.disabled]="btnSaveDisabled"> Save</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </mat-card-content>
+</mat-card>
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+  style="margin-top: -20.5rem; display: block; margin-left: -6.5rem;">
+  <div class="d-flex justify-content-center">
+    <span class="loader"></span>
+  </div>
+</div>
+<!-- model pop up for logic ended -->

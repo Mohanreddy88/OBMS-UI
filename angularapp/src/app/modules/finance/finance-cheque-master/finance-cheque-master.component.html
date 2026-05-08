@@ -1,0 +1,144 @@
+<div class="wlt-c-furg-content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <h1 class="mb-1">Cheque Master</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+        <ol class="breadcrumb float-md-right">
+          <li class="breadcrumb-item"><a routerLink="/dashboard">Finance</a></li>
+          <li class="breadcrumb-item active">Cheque Master</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-card>
+  <mat-card-content>
+    <form *ngIf="errorMessage =='' && warningMessage ===''">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Running No</mat-label>
+            <input type="text" matInput placeholder="" autocomplete="off" disabled>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Bank</mat-label>
+            <mat-select>
+              <mat-option value="Bank1">
+                Bank1
+              </mat-option>
+              <mat-option value="Bank2">
+                Bank2
+              </mat-option>
+              <mat-option value="Bank3">
+                Bank3
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Cheque No</mat-label>
+            <input type="text" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Cheque Amount</mat-label>
+            <input type="text" matInput placeholder="" autocomplete="off" disabled>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+          <mat-checkbox>Is Active</mat-checkbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="mat-table wlt-table">
+              <thead>
+                <tr class="mat-header-row">
+                  <th class="mat-header-cell" style="width: 20px;">Select</th>
+                  <th class="mat-header-cell">Branch Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="mat-row">
+                  <td class="mat-cell">
+                    <mat-checkbox></mat-checkbox>
+                  </td>
+                  <td class="mat-cell">
+                    HQ124
+                  </td>
+                </tr>
+                <tr class="mat-row">
+                  <td class="mat-cell">
+                    <mat-checkbox></mat-checkbox>
+                  </td>
+                  <td class="mat-cell">
+                    HQ124
+                  </td>
+                </tr>
+                <tr class="mat-row">
+                  <td class="mat-cell">
+                    <mat-checkbox></mat-checkbox>
+                  </td>
+                  <td class="mat-cell">
+                    HQ124
+                  </td>
+                </tr>
+                <tr class="mat-row">
+                  <td class="mat-cell">
+                    <mat-checkbox></mat-checkbox>
+                  </td>
+                  <td class="mat-cell">
+                    HQ124
+                  </td>
+                </tr>
+                <tr class="mat-row">
+                  <td class="mat-cell">
+                    <mat-checkbox></mat-checkbox>
+                  </td>
+                  <td class="mat-cell">
+                    HQ124
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="text-right">
+            <button *ngIf="this.userAccessModel.deleteAccess == true || currentUser == 'superadmin'"
+              class="btn wlt-c-furg-btn-gray mr-3"> Delete</button>
+            <button
+              *ngIf="this.userAccessModel.createAccess == true || this.userAccessModel.updateAccess == true || currentUser == 'superadmin'"
+              class="btn wlt-c-furg-btn-primary"> Save</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div *ngIf="warningMessage !==''">
+      <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+    </div>
+    <div *ngIf="errorMessage !==''">
+      <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+  style="margin-top: -20.5rem; display: block; margin-left: -6.5rem;">
+  <div class="d-flex justify-content-center">
+    <span class="loader"></span>
+  </div>
+</div>
+<!-- model pop up for logic ended -->

@@ -1,0 +1,85 @@
+/* Ensure the navbar behaves as a single row */
+.navbar-menu-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 10px;
+  }
+  /* Limit time and user block width */
+  .wlt-c-furg-date-time, .wlt-c-furg-welcome-text {
+    white-space: nowrap;
+    margin-left: auto;
+    margin-right: 15px;
+    font-size: 0.9rem; /* Adjust font size if needed */
+  }
+  
+  .wlt-c-furg-welcome-text {
+    display: flex;
+    align-items: center;
+  }
+  /* Dropdown styling */
+  .wlt-c-furg-dropdown {
+    position: relative;
+  }
+  
+  .wlt-c-furg-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+  }
+  
+  .wlt-c-furg-dropdown:hover .wlt-c-furg-dropdown-content {
+    display: block;
+  }
+
+  /* Reduce the spacing between navbar items */
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 17px;
+    margin: 0;
+    list-style: none;
+  }
+  
+  /* Adjust the spacing between nav items */
+  .nav-item {
+    display: flex;
+    align-items: center;
+    margin: 0 5px; /* Reduced margin to minimize spacing */
+  }
+  
+  /* Reduce padding around the links */
+  .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 2px 5px;
+    font-size: 0.95rem; /* Reduced font size */
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  
+  /* Icon margin reduced for tighter spacing */
+  .nav-link .material-symbols-rounded {
+    margin-right: 3px; /* Reduce space between icon and text */
+  }
+  
+  /* Adjust the width and padding for the user and date section */
+  .wlt-c-furg-date-time, .wlt-c-furg-welcome-text {
+    white-space: nowrap;
+    margin-left: auto;
+    margin-right: 10px;
+    font-size: 0.9rem;
+    padding: 2px 5px;
+  }
+  
+  /* Adjust dropdown menu spacing */
+  .wlt-c-furg-dropdown-content {
+    padding: 5px;
+  }
+  

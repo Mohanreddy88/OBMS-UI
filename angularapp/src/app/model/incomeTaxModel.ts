@@ -1,0 +1,30 @@
+export interface IncomeTaxModel {
+    IT_ID: number;
+    IT_SAL_FROM: number;
+    IT_SAL_TO: number;
+    IT_CATEGORY1: number;
+    K_2: number;
+    KA1_2: number;
+    KA2_2: number;
+    KA3_2: number;
+    KA4_2: number;
+    KA5_2: number;
+    KA6_2: number;
+    KA7_2: number;
+    KA8_2: number;
+    KA9_2: number;
+    KA10_2: number;
+    K_3: number;
+    KA1_3: number;
+    KA2_3: number;
+    KA3_3: number;
+    KA4_3: number;
+    KA5_3: number;
+    KA6_3: number;
+    KA7_3: number;
+    KA8_3: number;
+    KA9_3: number;
+    KA10_3: number;
+    LASTUPDATE: string;
+    LastUpdatedBy: string | null;
+}

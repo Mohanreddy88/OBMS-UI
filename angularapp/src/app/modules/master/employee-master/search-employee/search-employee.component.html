@@ -1,0 +1,94 @@
+<p class="close" [mat-dialog-close]="true">
+  <mat-icon class="close-icon">close</mat-icon>
+</p>
+<h1 mat-dialog-title>Search</h1>
+<form [formGroup]="frm">
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+        <div class="text-right">
+          <mat-form-field appearance="outline">
+            <mat-label>Branch</mat-label>
+            <mat-select formControlName="BRANCH_ID" (selectionChange)="branchChange($event.value)">
+              <mat-option *ngFor="let d of branchList" value="{{d.Code}}">{{d.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+        <div class="text-right">
+          <mat-form-field appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-12 co-sm-12 col-md-6 col-lg-6">
+
+        <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="table-responsive my-3">
+          <table mat-table [dataSource]="dataSource" class="wlt-table table-striped" matSort
+            (matSortChange)="announceSortChange($event)">
+            <ng-container matColumnDef="EMP_CODE">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee No</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.EMP_CODE}} </td>
+            </ng-container>
+            <ng-container matColumnDef="EMP_ROLE">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Category</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.EMP_ROLE}} </td>
+            </ng-container>
+            <ng-container matColumnDef="EMP_NAME">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name [Joined Date]</th>
+              <td mat-cell *matCellDef="let element" class="text-left">
+                {{ element.EMP_NAME }}
+                <span *ngIf="element.EMPPAY_DATE_JOINED">[{{ element.EMPPAY_DATE_JOINED |
+                  date:'yyyy/MM/dd' }}]</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="EMP_SEX">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.EMP_SEX}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="EMP_IC_NEW">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> New IC</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.EMP_IC_NEW}} </td>
+            </ng-container>
+            <ng-container matColumnDef="EMP_IC_OLD">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Old IC</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.EMP_IC_OLD}} </td>
+            </ng-container>
+            <ng-container matColumnDef="EMP_PASSPORT_NO">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Passport</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.EMP_PASSPORT_NO}} </td>
+            </ng-container>
+            <ng-container matColumnDef="EMP_TOWN">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> City</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.EMP_TOWN}} </td>
+            </ng-container>
+            <ng-container matColumnDef="action" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef style="text-align:center; width: 120px;">
+                Action
+              </th>
+              <td mat-cell *matCellDef="let element" style="text-align:center;">
+                <a style="cursor:pointer;" class="wlt-c-furg-text-primary mr-2" matTooltip="Select Employee"
+                  (click)="selectEmp(element)">
+                  <mat-icon aria-hidden="false" aria-label="add icon">add</mat-icon>
+                </a>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </mat-dialog-content>
+</form>

@@ -1,0 +1,10 @@
+.s-no-column {
+    width: 50px; /* Adjust the width as needed */
+    text-align: center;
+  }
+
+  .name-column {
+    width: 100px; /* Adjust the width as needed */
+    text-align: left;
+  }
+  

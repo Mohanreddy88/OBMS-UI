@@ -1,0 +1,7 @@
+.wide-button {
+  min-width: 120px; /* or any value you prefer */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* spacing between icon and text */
+}

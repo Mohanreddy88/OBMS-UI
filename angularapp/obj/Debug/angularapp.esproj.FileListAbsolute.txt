@@ -1,0 +1,5 @@
+C:\Users\HP\source\repos\OBMS.Application\angularapp\obj\Debug\angularapp.esproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\OBMSAPPNEW\OBMS.Application\angularapp\obj\Debug\angularapp.esproj.CoreCompileInputs.cache
+C:\Users\PC\Source\Repos\OBMSAPPNEW\OBMS.Application\angularapp\obj\Debug\angularapp.esproj.SuggestedBindingRedirects.cache
+C:\Users\PC\Source\Repos\OBMSAPPNEW\OBMS.Application\angularapp\obj\Debug\angularapp.esproj.CoreCompileInputs.cache
+D:\Esync Project\OBMSAPPNEW\OBMS.Application\angularapp\obj\Debug\angularapp.esproj.CoreCompileInputs.cache

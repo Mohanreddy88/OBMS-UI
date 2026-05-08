@@ -1,0 +1,22 @@
+.custom-warning-text {
+    color: red;
+    font-size: 0.9rem; /* or 18px */
+    font-weight: 300;
+  }
+  
+  .warning-message {
+    width: 100%;
+  }
+  
+  .text-danger {
+    color: red;
+  }
+  .btn-delete {
+    background-color: #dc3545; /* Bootstrap red */
+    color: white;
+  }
+  
+  .btn-print {
+    background-color: #17a2b8; /* Bootstrap info/light blue */
+    color: white;
+  }

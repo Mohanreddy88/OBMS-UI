@@ -1,0 +1,86 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+          <h1 class="mb-1">SIP Slab</h1>
+        </div><!-- /.col -->
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-1">
+          <ol class="breadcrumb float-md-right">
+            <li class="breadcrumb-item"><a routerLink="/dashboard">Master</a></li>
+            <li class="breadcrumb-item active">SIP Slab</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<mat-card>
+    <mat-card-content>
+        <div class="row" *ngIf="warningMessage ===''">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4 order-2 order-md-1">
+                <div class="text-right">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Search</mat-label>
+                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                      </mat-form-field>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 order-1 order-md-2" *ngIf="this.userAccessModel.createAccess == true  || currentUser == 'superadmin'">
+                <div class="text-right pt-2">
+                    <button class="btn wlt-c-furg-btn-primary" [routerLink]="['/master/sip-slab/new-sip-slab']"><mat-icon>add</mat-icon><span>New</span></button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive" *ngIf="errorMessage =='' && dataSource !='' && warningMessage ===''">
+          <table mat-table [dataSource]="dataSource" class="wlt-table table-striped" matSort (matSortChange)="announceSortChange($event)">          
+          
+            <ng-container matColumnDef="siP_from">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Start </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.SIP_from}} </td>
+            </ng-container>
+            <ng-container matColumnDef="siP_to">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> End </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.SIP_to}} </td>
+            </ng-container>
+            <ng-container matColumnDef="siP_worker">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee </th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.SIP_worker}} </td>
+            </ng-container>
+              <ng-container matColumnDef="siP_boss">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Employer </th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.SIP_boss}} </td>
+              </ng-container>
+              <ng-container matColumnDef="action" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef style="text-align:center; width: 120px;">
+                    Action
+                </th>
+                <td mat-cell *matCellDef="let row" style="text-align:center;">
+                    <a *ngIf="this.userAccessModel.readAccess == true || currentUser == 'superadmin'" style="cursor:pointer;" class="wlt-c-furg-text-primary mr-2" matTooltip="View"><mat-icon aria-hidden="false" aria-label="edit icon" (click)="onEditClick(row)">edit</mat-icon></a>
+                    <!-- <a style="cursor:pointer;" class="wlt-c-furg-text-success mr-2" matTooltip="View"><mat-icon aria-hidden="false" aria-label="view icon">visibility</mat-icon></a> -->
+                    <a *ngIf="this.userAccessModel.deleteAccess == true  || currentUser == 'superadmin'" style="cursor:pointer;" class="wlt-c-furg-text-danger" matTooltip="Delete"><mat-icon aria-hidden="false" aria-label="trash icon" (click)="onDeleteClick(row.SIP_id)">delete_outline</mat-icon></a>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+        <div *ngIf="warningMessage !==''">
+          <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>   
+         </div>
+         <div *ngIf="errorMessage !==''">
+          <mat-label style="color:red">{{errorMessage}}</mat-label>   
+         </div>     
+        <mat-paginator *ngIf="warningMessage ===''"  [pageSizeOptions]="dynamicPageSizeOptions"
+                         showFirstLastButtons 
+                         aria-label="Select page of periodic elements">
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+    style="margin-top: -20.5rem; display: block; margin-left: -6.5rem;">
+    <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+    </div>
+</div>
+<!-- model pop up for logic ended -->

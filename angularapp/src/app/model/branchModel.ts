@@ -1,0 +1,24 @@
+export class BranchModel{
+ID!:number;
+Code!:string;
+Name!:string;
+Address1!:string;
+Address2!:string;
+PostCode!:number;
+City!:string;
+State!:string;
+Phone!:number;
+Fax?:number;
+BankName!:string;
+BankBranch!:string;
+BankAccount!:number;
+PersonIncharge!:string;
+Description?:string;
+Email?:string;
+ShortName!:string;
+IsHeadQuarters?:boolean;
+UbsCode!:string;
+LastUpdate?:Date;
+LastUpdatedBy?:string;
+ParentBranch?:string;
+}

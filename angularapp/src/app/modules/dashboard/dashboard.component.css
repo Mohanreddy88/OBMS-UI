@@ -1,0 +1,17 @@
+.legacy-card {
+  border-radius: 12px;
+}
+
+.legacy-link-box {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 15px;
+  background: #fafafa;
+  transition: 0.2s ease-in-out;
+  height: 100%;
+}
+
+.legacy-link-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}

@@ -1,0 +1,20 @@
+<div class="wlt-c-furg-content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <h1 class="mb-1">Report/{{reportName}} Report</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+        <ol class="breadcrumb float-md-right">
+           <li class="breadcrumb-item"><a routerLink="/dashboard">Report</a></li>
+          <li class="breadcrumb-item active">{{reportName}} Report</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-card class="report-card">
+  <mat-card-content>
+    <iframe class="report-wrapper fixed-height" [src]="urlSafe"></iframe>
+  </mat-card-content>
+</mat-card>

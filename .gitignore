@@ -1,0 +1,36 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/angularapp/.vs/angularapp/FileContentIndex
+/angularapp/.vs/angularapp/FileContentIndex/65e90b27-c74b-48bc-abe1-02d92d2d7ef3.vsidx
+/angularapp/.vs/angularapp/FileContentIndex/8599c2da-28e8-4aa0-a491-b47c3cf0cbd8.vsidx
+/angularapp/.vs/angularapp/FileContentIndex/8b89c97e-00ab-40ab-b47b-63deb4b06762.vsidx
+/angularapp/.vs/angularapp/FileContentIndex/c5d887f2-ba60-4de0-8afa-2aea5124eff9.vsidx
+/angularapp/.vs/angularapp/FileContentIndex/ed906eb2-8537-4e95-a79c-42ed6839d515.vsidx
+/angularapp/.vs/angularapp/v17/.wsuo
+/angularapp/.vs/slnx.sqlite
+/.vs/OBMSAPP-UI/FileContentIndex/93678655-2aae-48c1-bb7c-f060cc6831a9.vsidx
+.vs/slnx.sqlite
+/.vs/OBMSAPP-UI/FileContentIndex/0cebac3d-6920-48aa-876d-2f537ff95eeb.vsidx
+/.vs/OBMSAPP-UI/FileContentIndex/387dd8a3-0fa8-4d1d-a95c-cb7c0c58492c.vsidx
+/.vs/OBMSAPP-UI/FileContentIndex/4d682425-8ef7-4926-b037-68dbde248909.vsidx
+/.vs/OBMSAPP-UI/FileContentIndex/bd2ba126-c8a2-471f-b7e2-f0e53f71b511.vsidx
+/.vs/OBMSAPP-UI/FileContentIndex/ce77cec1-a6e3-41b0-9383-69a18d681a21.vsidx
+/.vs/OBMSAPP-UI/FileContentIndex/cc8f79c1-a691-45ab-987a-603cd7d546ae.vsidx
+
+# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+*.slnx.sqlite
+
+# Ignore backup and temporary files
+*.backup.json
+*.sqlite
+
+# Ignore folders by name (adjust paths as needed)
+OBMSAPP-UI/v17/
+
+/.vs/slnx.sqlite
+/.vs/slnx.sqlite

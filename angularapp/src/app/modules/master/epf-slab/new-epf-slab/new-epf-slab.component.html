@@ -1,0 +1,98 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <h1 class="md-1">{{epfTitleStatus == 'new'?'New EPF Slab': 'Edit EPF Slab'}}</h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+                <ol class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Master</a></li>
+                    <li class="breadcrumb-item"><a routerLink="/master/epf-slab">EPF Slab List</a></li>
+                    <li class="breadcrumb-item active">{{epfTitleStatus == 'new'?'New EPF Slab': 'Edit EPF Slab'}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="epfForm">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Salary Start</mat-label>
+                        <input type="text" formControlName="epf_from" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Salary End</mat-label>
+                        <input type="text" formControlName="epf_to" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                    <mat-label>Employee Contribution</mat-label>
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>11%</mat-label>
+                                <input type="text" formControlName="epf_worker" matInput placeholder="" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>8%</mat-label>
+                                <input type="text" formControlName="epf_worker8Pa" matInput placeholder="" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>For Age > 55</mat-label>
+                                <input type="text" formControlName="epf_worker55" matInput placeholder="" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                    <mat-label>Employer Contribution</mat-label>
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Employer Contribution</mat-label>
+                                <input type="text" formControlName="epf_boss" matInput placeholder="" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>For Age > 55 </mat-label>
+                                <input type="text" formControlName="epf_boss55" matInput placeholder="" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-right">
+                        <button class="btn wlt-c-furg-btn-gray mr-3" mat-dialog-close (click)="clearEPFDetails()"> Cancel</button>
+                        <button *ngIf="(this.userAccessModel.createAccess == true || this.userAccessModel.updateAccess == true || currentUser== 'superadmin')"
+                        class="btn wlt-c-furg-btn-primary" (click)="savebuttonClick()"> {{epfForm.get('epf_id')?.value === 0 ? 'Save' : 'Update' }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+    style="margin-top: -20.5rem; display: block; margin-left: -6.5rem;">
+    <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+    </div>
+</div>
+<!-- model pop up for logic ended -->
