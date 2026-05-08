@@ -1,0 +1,36 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <h1 class="md-1">Leave Application Form</h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+                <ol class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Report</a></li>
+                    <li class="breadcrumb-item">Leave Application Form
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-card class="report-card">
+    <mat-card-content>
+        <div *ngIf="warningMessage !==''">
+            <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+        </div>
+        <div *ngIf="errorMessage !==''">
+            <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+        </div>
+        <iframe class="report-wrapper fixed-height" *ngIf="warningMessage ===''" #myFrame [src]="urlSafe"></iframe>
+    </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+    style="margin-top: -10.5rem; display: block; margin-left: -6.5rem;">
+    <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+    </div>
+</div>
+<!-- model pop up for logic ended -->

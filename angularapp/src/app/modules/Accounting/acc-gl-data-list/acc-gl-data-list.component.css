@@ -1,0 +1,52 @@
+/* Simulates ListRow */
+.list-row {
+    background-color: white;
+  }
+  
+  /* Simulates AlternatingRowStyle */
+  .alt-row {
+    background-color: #FFFFC0; /* pale yellow */
+  }
+  
+  /* Simulates HeaderStyle */
+  .title-header {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  /* Simulates SelectedRowStyle */
+  .selected-row {
+    background-color: #C0C0FF !important;
+  }
+  
+  /* Simulates FooterStyle */
+  .mat-footer-row {
+    background-color: transparent;
+  }
+  
+  /* Simulates PagerStyle */
+  .mat-paginator {
+    background-color: #E0E0E0;
+    border-style: outset;
+    font-size: smaller;
+  }
+  .wlt-c-furg-btn-danger {
+    background-color: #dc3545; /* Bootstrap danger red */
+    color: white;
+    border: none;
+  }
+  
+  .wlt-c-furg-btn-danger:hover {
+    background-color: #c82333;
+  }  
+
+  .wlt-c-furg-btn-search {
+    background-color: rgb(87, 67, 234); /* Bootstrap danger red */
+    color: white;
+    border: none;
+  }
+  
+  .wlt-c-furg-btn-search:hover {
+    background-color: rgb(87, 67, 234);;
+  } 

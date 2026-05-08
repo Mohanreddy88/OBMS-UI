@@ -1,0 +1,24 @@
+export class BranchResponseModel{
+    id!:number;
+    code!:string;
+    name!:string;
+    address1!:string;
+    address2!:string;
+    postCode!:number;
+    city!:string;
+    state!:string;
+    phone!:number;
+    fax?:number;
+    bankName!:string;
+    bankBranch!:string;
+    bankAccount!:number;
+    personIncharge!:string;
+    description?:string;
+    email?:string;
+    shortName!:string;
+    isHeadQuarters?:boolean;
+    ubsCode!:string;
+    lastUpdate?:Date;
+    lastUpdatedBy?:string;
+    parentBranch?:string;
+    }

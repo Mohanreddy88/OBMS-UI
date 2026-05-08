@@ -1,0 +1,92 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <h1 class="md-1">Check Role Report</h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+                <ol class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Report</a></li>
+                    <li class="breadcrumb-item">Check Role Report
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-card class="report-card" [ngClass]="{'full-width-report': clientName}">
+    <mat-card-content>
+        <form [formGroup]="checkRoleForm">
+            <div class="row" *ngIf="warningMessage ===''">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Period</mat-label>
+                        <div style="display: flex; align-items: center;">
+                            <input matInput [matDatepicker]="picker" formControlName="AdvanceDate"
+                                (dateChange)="changeAdvanceDate('change', $event)">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        </div>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Branch Code</mat-label>
+                        <mat-select formControlName="BranchCode"
+                            (keydown)="onKeyDropdown($event, 'branchSearchString', 'branchModel', 'filteredBranchList', 'Code', branchSearchSubject)"
+                            (selectionChange)="onBranchSelectionChange($event)" [panelClass]="'custom-dropdown-panel'">
+                            <mat-option [value]="0" class="highlight-option"></mat-option>
+                            <mat-option *ngFor="let branch of branchModel" [value]="branch.Code">
+                                {{ branch.Code }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-5" *ngIf="errorMessage !==''">
+                    <mat-label style="color:red">{{errorMessage}}</mat-label>
+                </div>
+            </div>
+            <div class="row" *ngIf="warningMessage ===''">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Client</mat-label>
+                        <mat-select formControlName="ClientCode"
+                            (keydown)="onKeyDropdown($event, 'clientSearchString', 'clientModel', 'filteredClientList', 'Name', clientSearchSubject)"
+                            (selectionChange)="onClientSelectionChange($event)" [panelClass]="'custom-dropdown-panel'">
+                            <mat-option [value]="0" class="highlight-option"></mat-option>
+                            <mat-option *ngFor="let client of clientModel" [value]="client.Code">
+                                {{ client.Name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="text-left">
+                        <button class="btn wlt-c-furg-btn-primary mr-1" [disabled]="checkRoleForm.invalid"
+                            (click)="getReportShowClick()">Show </button>&nbsp;
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="warningMessage ===''">
+
+            </div>
+        </form>
+        <div *ngIf="warningMessage !==''">
+            <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+        </div>
+        <div *ngIf="errorMessage !==''">
+            <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+        </div>
+        <iframe *ngIf="urlSafe" class="report-wrapper fixed-height" [src]="urlSafe"></iframe>
+
+    </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+    style="margin-top: -10.5rem; display: block; margin-left: -6.5rem;">
+    <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+    </div>
+</div>
+<!-- model pop up for logic ended -->

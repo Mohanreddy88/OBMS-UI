@@ -1,0 +1,408 @@
+<nav class="wlt-c-furg-sidebar wlt-c-furg-sidebar-offcanvas" id="sidebar">
+  <div class="navbar-brand-wrapper" style="width: 235px;height:95px;">
+    <a class="navbar-brand brand-logo mr-0">
+      <!-- UAT server logo -->
+      <!-- <img src="assets/img/logo-sample.png" alt="" /> -->
+       
+      <!-- fwg server logo -->
+      <img src="assets/img/logo-white.png">
+    </a>
+  </div>
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link" (click)="toggleSubmenu('master')" hidden="true">Master</a>
+      <div class="collapse" [ngClass]="{'show': isSubmenuOpen('master')}">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('master')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" routerLink="/master/branch-master"><a class="nav-link">Branch Master</a></li>
+                <li class="nav-item" routerLink="/master/client-master"><a class="nav-link">Client Master</a></li>
+                <!-- <li class="nav-item" routerLink="/master/shift-timings"> <a class="nav-link">Shift Timings</a></li> -->
+                <li class="nav-item" routerLink="/master/epf-slab"><a class="nav-link">EPF Slab </a></li>
+                <li class="nav-item" routerLink="/master/sip-slab"><a class="nav-link">SIP Slab</a></li>
+                <li class="nav-item" routerLink="/master/income-tax-slab"><a class="nav-link">Income Tax Slab </a></li>
+                <li class="nav-item" routerLink="/master/leave-slab"><a class="nav-link">Leave Slab</a></li>
+                <li class="nav-item" routerLink="/master/socso-slab"><a class="nav-link">SOCSO Slab</a></li>
+                <li class="nav-item" routerLink="/master/salary-slab"><a class="nav-link">Salary Slab</a></li>
+                <!-- <li class="nav-item" > <a class="nav-link">Salary Slab(Non Structure) </a></li> -->
+                <li class="nav-item" routerLink="/master/employee-master"><a class="nav-link">Employee Master</a></li>
+                <li class="nav-item" routerLink="/master/employee-transfer"><a class="nav-link">Employee Transfer</a></li>
+                <li class="nav-item" routerLink="/master/employee-history"><a class="nav-link">Employee Transfer History</a></li>
+                <!--<li class="nav-item" [routerLink]="['/master/report/user-report']"> <a class="nav-link">User Report</a></li>-->
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('master')}">
+              <span class="reportHeader">
+                <a class="nav-link collapsed reportHeader">
+                  Reports
+                </a>
+              </span>
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" [routerLink]="['/master/report/branch-report']"><a class="nav-link">Branch
+                    Report</a>
+                </li>
+                <li class="nav-item" [routerLink]="['/master/report/client-master-report']"><a class="nav-link">Client
+                    Report</a></li>
+                <li class="nav-item" [routerLink]="['master/report/employee-list']"><a class="nav-link">Employee
+                    List</a></li>
+                <li class="nav-item" [routerLink]="['master/report/kkdn']"><a class="nav-link">KKDN</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="toggleSubmenu('quotation')" hidden="true">Quotation & Agreement</a>
+      <div class="collapse" [ngClass]="{'show': isSubmenuOpen('quotation')}">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('quotation')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" routerLink="/quotation-and-agreement/agreements"><a class="nav-link">Agreements</a>
+                </li>
+                <li class="nav-item" routerLink="/quotation-and-agreement/agreements-discount-report"><a
+                    class="nav-link">Agreements Discount Report</a></li>
+                <li class="nav-item" routerLink="/quotation-and-agreement/agreement-termination"><a
+                    class="nav-link">Agreement
+                    Termination</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <!-- Add other submenu items similarly -->
+    <li class="nav-item">
+      <a class="nav-link" (click)="toggleSubmenu('inventory')" hidden="true">Inventory</a>
+      <div class="collapse" [ngClass]="{'show': isSubmenuOpen('inventory')}">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('inventory')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">              
+                <li class="nav-item" routerLink="/inventory/item-master"><a class="nav-link">Item Master </a></li>
+                <li class="nav-item" routerLink="/inventory/asset-master"><a class="nav-link">Asset Master</a></li>
+                <li class="nav-item" routerLink="/inventory/recepient-master"><a class="nav-link">Recepient Master</a></li>
+                <li class="nav-item" routerLink="/inventory/purchase-bills"><a class="nav-link">Purchase Bills</a></li>
+                <li class="nav-item" routerLink="/inventory/material-issue"><a class="nav-link">Material Issue</a></li>
+              </ul>
+            </div>
+          </li>
+          <!-- Second Submenu -->
+          <li class="nav-item">
+            <span class="reportHeader">
+              <a class="nav-link collapsed reportHeader" data-toggle="collapse" data-parent="#accordion"
+                data-target="#Inventory" aria-expanded="false" aria-controls="Master">
+                Reports
+              </a>
+            </span>
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('inventory')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" routerLink="/inventory/report/hq-stock-ledger"><a class="nav-link">HQ Stock
+                    Ledger</a>
+                </li>
+                <li class="nav-item" routerLink="/inventory/report/branch-stock-ledger"><a class="nav-link">Branch
+                    Stock
+                    Ledger</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" (click)="toggleSubmenu('finance')" hidden="true">Finance</a>
+      <div class="collapse" [ngClass]="{'show': isSubmenuOpen('finance')}">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('finance')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" routerLink="/finance/invoice"><a class="nav-link">Invoice</a></li>
+                <li class="nav-item" routerLink="/finance/batch-invoice"><a class="nav-link">Batch Invoice</a></li>
+                <li class="nav-item" routerLink="/finance/invoice-recycle-bin"><a class="nav-link">Invoice Recycle Bin
+                  </a>
+                </li>
+                <li class="nav-item" routerLink="/finance/search-payments"><a class="nav-link">Payments</a></li>
+                <li class="nav-item" routerLink="/finance/payments-recycle-bin"><a class="nav-link">Payments Recycle
+                    Bin</a>
+                </li>
+                <li class="nav-item" routerLink="/finance/receipts/search-receipt"><a class="nav-link">Receipts</a></li>
+                <!--          <li class="nav-item" routerLink="/finance/receipts"> <a class="nav-link">Receipts</a></li>-->
+                <li class="nav-item" routerLink="/finance/cheque-status"><a class="nav-link">Cheque Status</a></li>
+                <li hidden class="nav-item" routerLink="/finance/cheque-master"><a class="nav-link">Cheque Master</a></li>
+                <li class="nav-item" routerLink="/inventory/category-master"><a class="nav-link">Category Master</a></li>
+                <li class="nav-item" routerLink="/inventory/supplier-master"><a class="nav-link">Supplier Master</a></li>
+                <li class="nav-item" routerLink="/inventory/utility-bills"><a class="nav-link">Expenses</a></li>
+                <li class="nav-item" routerLink="/finance/legal-demand-action"><a class="nav-link">Legal/Demand
+                    Action</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <!-- Second Submenu -->
+          <li class="nav-item">
+            <span class="reportHeader">
+              <a class="nav-link collapsed reportHeader" data-toggle="collapse" data-parent="#accordion"
+                data-target="#Finance" aria-expanded="false" aria-controls="Master">
+                Reports
+              </a>
+            </span>
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('finance')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" routerLink="/report/finance/payment-voucher-summary-report"><a
+                    class="nav-link">Payment Voucher Summary</a></li>
+                <li class="nav-item" routerLink="/report/finance/receipt-voucher-summary-report"><a
+                    class="nav-link">Receipt Voucher Summary</a></li>
+                <li class="nav-item" routerLink="/report/finance/branch-transactions-report"><a class="nav-link">Branch
+                    Transactions </a>
+                </li>
+                <li class="nav-item" routerLink="/report/finance/branch-collections-report"><a class="nav-link">Branch
+                    Collections</a></li>
+                <li class="nav-item" routerLink="/report/finance/cheque-status-report"><a class="nav-link">Cheque
+                    Status</a>
+                </li>
+                <li class="nav-item" routerLink="/report/finance/credit-note-summary-report"><a class="nav-link">Credit
+                    Note Summary</a></li>
+                <li class="nav-item" routerLink="/report/finance/profit-and-loss-report"><a class="nav-link">Profit And
+                    Loss Summary</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <span class="reportHeader">
+              <a class="nav-link collapsed reportHeader pl-5" data-toggle="collapse" data-parent="#accordion"
+                data-target="#Finance" aria-expanded="false" aria-controls="Master">
+                Invoice Details
+              </a>
+            </span>
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('finance')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item"><a class="nav-link" routerLink="/report/finance/invoice-report">Invoice Report</a>
+                </li>
+                <li class="nav-item"><a class="nav-link"
+                    routerLink="/report/finance/invoice-collection-status-report">Invoice Collection Status</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/report/finance/monthly-invoice-status">Monthly
+                    Invoice Status</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" routerLink="/report/finance/deleted-invoice-details">Deleted
+                    Invoice Details</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <span class="reportHeader">
+              <a class="nav-link collapsed reportHeader pl-5" data-toggle="collapse" data-parent="#accordion"
+                data-target="#Finance" aria-expanded="false" aria-controls="Master">
+                Ageing Report
+              </a>
+            </span>
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('finance')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item"><a class="nav-link" routerLink="/report/finance/client-statement">Client
+                    Statement</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/report/finance/supplier-statement">Supplier
+                    Statement</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/report/finance/invoice-ageing">Invoice Ageing</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="toggleSubmenu('payroll')" hidden="true">Payroll</a>
+      <div class="collapse" [ngClass]="{'show': isSubmenuOpen('payroll')}">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('payroll')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" routerLink="/payroll/employee-monthly-advance"><a class="nav-link">Employee
+                    Monthly Advance</a></li>
+                <li class="nav-item" routerLink="/payroll/new-employee-daily-advance"><a class="nav-link">Employee
+                    Daily Advance </a></li>
+                <li class="nav-item" routerLink="/payroll/search-employee-loan"><a class="nav-link">Employee Loan</a></li>
+                <li class="nav-item" routerLink="/payroll/search-employee-uniform-loan"><a class="nav-link">Employee
+                    Uniform Loan</a></li>
+                <li class="nav-item" routerLink="/payroll/new-attendance"><a class="nav-link">Attendance</a></li>
+                <li class="nav-item" routerLink="/payroll/misc-transactions"><a class="nav-link">Misc Transactions </a>
+                </li>
+                <li class="nav-item" routerLink="/payroll/salary-processing"><a class="nav-link">Salary Processing</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <!-- Second Submenu -->
+          <li class="nav-item">
+            <span class="reportHeader">
+              <a class="nav-link collapsed reportHeader" data-toggle="collapse" data-parent="#accordion"
+                data-target="#Payroll" aria-expanded="false" aria-controls="Master">
+                Reports
+              </a>
+            </span>
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('payroll')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" [routerLink]="['report/payroll/monthly-advance-report']"><a class="nav-link">Salary
+                    Advance Report</a>
+                <li class="nav-item" [routerLink]="['report/payroll/payslip-report']"><a class="nav-link">Pay Slip &
+                    Time Sheet</a>
+                <li class="nav-item" [routerLink]="['report/payroll/payslip2-report']"><a class="nav-link">Pay Slip II
+                    & Time Sheet II</a>
+                <li hidden class="nav-item" [routerLink]="['report/payroll/payslip3-report']"><a class="nav-link">Pay Slip III
+                    & Time Sheet III</a>
+                </li>
+
+                <li class="nav-item" [routerLink]="['report/payroll/pay-sheet-report']"><a class="nav-link">Pay Sheet
+                  </a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/yearly-pay-sheet-report']"><a
+                    class="nav-link">Yearly
+                    Pay Sheet</a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/pay-history-report']"><a class="nav-link">Pay
+                    History</a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/loan-ledger-report']"><a class="nav-link">Loan
+                    ledger</a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/income-tax-report']"><a class="nav-link">Income Tax
+                    Form</a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/leave-register-report']"><a class="nav-link">Leave
+                    Register </a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/epf-statement-report']"><a class="nav-link">EPF
+                    Statement </a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/socso-statement-report']"><a class="nav-link">SOCSO
+                    Statement </a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/sip-statement-report']"><a class="nav-link">SIP
+                    Statement </a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/netpay-report']"><a class="nav-link">Salary
+                    Statement </a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/bank-salary-report']"><a class="nav-link"> Bank
+                    Salary
+                    Statement </a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/misc-transaction-report']"><a class="nav-link">Misc
+                    Transaction Report </a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/check-role-report']"><a class="nav-link">Check Role
+                  </a>
+                </li>
+                <li hidden class="nav-item" [routerLink]="['report/payroll/bank-salary2-report']"><a class="nav-link"> Bank
+                    Salary
+                    Statement 2 </a>
+                </li>
+                <li class="nav-item" [routerLink]="['report/payroll/list-summary-report']"><a class="nav-link">List
+                    Summary Report </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <!-- third Submenu -->
+          <li class="nav-item">
+            <span class="reportHeader">
+              <a class="nav-link collapsed reportHeader" data-toggle="collapse" data-parent="#accordion"
+                data-target="#Payroll" aria-expanded="false" aria-controls="Payroll">
+                FORMS
+              </a>
+            </span>
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('payroll')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" [routerLink]="['report/payroll/leave-application-report']"><a
+                    class="nav-link">Leave
+                    Application
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" (click)="toggleSubmenu('administration')" hidden="true">Administration</a>
+      <div class="collapse" [ngClass]="{'show': isSubmenuOpen('administration')}">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('administration')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" routerLink="/administration/user-registration"><a class="nav-link">User
+                    Administration</a></li>
+                <li class="nav-item" routerLink="/administration/user-access-rights"><a class="nav-link">User Access
+                    Rights</a></li>
+                <li class="nav-item" routerLink="/administration/user-branch-access"><a class="nav-link">User Branch
+                    Access</a></li>
+                <li class="nav-item" routerLink="/administration/user-bank-access"><a class="nav-link">User Bank Access
+                  </a>
+                </li>
+                <li class="nav-item" routerLink="/administration/bank-list"><a class="nav-link">Bank List</a></li>
+                <li class="nav-item" routerLink="/administration/bank-master"><a class="nav-link">Bank Master</a></li>
+                <li class="nav-item" routerLink="/administration/cheque-master"><a class="nav-link">Cheque Master</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" (click)="toggleSubmenu('accounting')" hidden="true">Accounting</a>
+      <div class="collapse" [ngClass]="{'show': isSubmenuOpen('accounting')}">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('accounting')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" hidden><a class="nav-link">Category Master</a></li>
+                <li class="nav-item" routerLink="/accounting/acc-gl-data-list"><a class="nav-link">General Ledger Data List </a></li>
+                <li class="nav-item" hidden><a class="nav-link">Trade Master </a></li>
+                <li class="nav-item" hidden><a class="nav-link">Income/Expenses Master</a></li>
+                <li class="nav-item" hidden><a class="nav-link">Trail Balance Process</a></li>
+              </ul>
+            </div>
+          </li>
+
+           <!-- third Submenu -->
+           <li class="nav-item">
+            <span class="reportHeader">
+              <a class="nav-link collapsed reportHeader" data-toggle="collapse" data-parent="#accordion"
+                data-target="#accounting" aria-expanded="false" aria-controls="accounting">
+                Reports
+              </a>
+            </span>
+            <div class="collapse" [ngClass]="{'show': isSubmenuOpen('accounting')}">
+              <ul class="nav flex-column wlt-c-furg-sub-menu">
+                <li class="nav-item" [routerLink]="['report/accounting/balance-sheet']"><a
+                  class="nav-link">Balance Sheet                  
+                </a>
+                <li class="nav-item" [routerLink]="['report/accounting/trail-balance']"><a
+                  class="nav-link">Trail Balance                   
+                </a>
+                <li class="nav-item" [routerLink]="['report/accounting/accounting-profit-and-loss']"><a
+                    class="nav-link">Profit And Loss                    
+                  </a>
+                  <li class="nav-item" [routerLink]="['report/accounting/bank-reconciliation']"><a
+                    class="nav-link">Bank Reconciliation                    
+                  </a>
+                  <li class="nav-item" [routerLink]="['report/accounting/general-ledger']"><a
+                    class="nav-link">General Ledger                    
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</nav>

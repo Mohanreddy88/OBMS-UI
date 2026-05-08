@@ -1,0 +1,159 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <h1 class="mb-1">{{isEdit ? 'Edit' : 'Add'}} Recepient</h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+                <ol class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Inventory</a></li>
+                    <li class="breadcrumb-item"><a routerLink="/inventory/recepient-master">Recepient Master List</a>
+                    </li>
+                    <li class="breadcrumb-item active">{{isEdit ? 'Update' : 'New'}} Recepient</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="frm" (ngSubmit)="onSubmit()">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Recepient Code</mat-label>
+                        <input type="text" formControlName="Code" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Recepient Name</mat-label>
+                        <input type="text" formControlName="Name" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Recepient I/C No.</mat-label>
+                        <input type="text" formControlName="ICNO" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 wlt-c-furg-profile">
+                    <h2><span>Address</span></h2>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Address Line1</mat-label>
+                        <input type="text" formControlName="Address1" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Address Line2</mat-label>
+                        <input type="text" formControlName="Address2" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Postal Code</mat-label>
+                        <input type="text" formControlName="PostCode" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>City</mat-label>
+                        <input type="text" formControlName="City" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>State</mat-label>
+                        <mat-select formControlName="State">
+                            <mat-option *ngFor="let d of stateList" value="{{d}}">{{d}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 wlt-c-furg-profile">
+                    <h2><span>Contact Info</span></h2>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Phone No</mat-label>
+                        <input type="text" formControlName="Phone" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Fax</mat-label>
+                        <input type="text" formControlName="Fax" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Supervisor</mat-label>
+                        <input type="text" formControlName="Supervisor" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Credit Limit</mat-label>
+                        <input type="text" formControlName="CreditLimit" matInput placeholder="" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Category</mat-label>
+                        <mat-select formControlName="Category">
+                            <mat-option *ngFor="let d of categories" value="{{d.ID}}">{{d.Name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-label class="mr-3"><strong>Status</strong></mat-label><br />
+                    <mat-radio-group aria-label="Select a New Salary Structure " formControlName="Status">
+                        <mat-radio-button value="A">Active</mat-radio-button>
+                        <mat-radio-button value="I">Inactive</mat-radio-button>
+                        <mat-radio-button value="H">Hold</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <!--                <div class="col-12 col-sm-12 col-md-4 col-lg-4">-->
+                <!--                    <mat-form-field appearance="outline">-->
+                <!--                        <mat-label>Last Update</mat-label>-->
+                <!--                        <input type="text" formControlName="LASTUPDATE" matInput placeholder="" autocomplete="off">-->
+                <!--                    </mat-form-field>-->
+                <!--                </div>-->
+                <!--                <div class="col-12 col-sm-12 col-md-4 col-lg-4">-->
+                <!--                    <mat-form-field appearance="outline">-->
+                <!--                        <mat-label>Last Updated By</mat-label>-->
+                <!--                        <input type="text" formControlName="LastUpdatedBy" matInput placeholder="" autocomplete="off">-->
+                <!--                    </mat-form-field>-->
+                <!--                </div>-->
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-right">
+                        <button class="btn wlt-c-furg-btn-gray mr-3" (click)="onCancelClick()" mat-dialog-close>
+                            Cancel</button>
+                        <button
+                            *ngIf="this.userAccessModel.createAccess == true || this.userAccessModel.updateAccess == true || currentUser == 'superadmin'"
+                            class="btn wlt-c-furg-btn-primary"> {{isEdit ? 'Update' : 'Save'}}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+    style="margin-top: -20.5rem; display: block; margin-left: -6.5rem;">
+    <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+    </div>
+</div>
+<!-- model pop up for logic ended -->

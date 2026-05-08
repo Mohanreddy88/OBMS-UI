@@ -1,0 +1,86 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <h1 class="mb-1">New Legal/Demand Action</h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+                <ol class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Finance</a></li>
+                    <li class="breadcrumb-item"><a routerLink="/finance/legal-demand-action">Legal/Demand Action List</a>
+                    </li>
+                    <li class="breadcrumb-item active">{{isEdit ? 'Update' : 'New'}} Legal/Demand Action</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="frm">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Branch</mat-label>
+                        <mat-select formControlName="Branch" (selectionChange)="branchChange($event.value)">
+                            <mat-option *ngFor="let d of branchList" value="{{d.Code}}">{{d.Code}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Client</mat-label>
+                        <mat-select formControlName="Client">
+                            <mat-option [value]="0"></mat-option>
+                            <mat-option *ngFor="let d of clientList" value="{{d.Code}}">{{d.Name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Action</mat-label>
+                        <mat-select formControlName="ActionTaken">
+                            <mat-option value="L">
+                                Legal
+                            </mat-option>
+                            <mat-option value="D">
+                                Demand
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Date Issue</mat-label>
+                        <input type="text" formControlName="DateIssue" matInput [matDatepicker]="picker1"
+                            placeholder="" autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="picker1">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Reason</mat-label>
+                        <textarea formControlName="Remarks" matInput placeholder="" autocomplete="off"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-right">
+                        <button class="btn wlt-c-furg-btn-gray mr-3" mat-dialog-close
+                        (click)="onCancelClick()"> Cancel</button>
+                        <button
+                            *ngIf="this.userAccessModel.createAccess == true || this.userAccessModel.updateAccess == true || currentUser == 'superadmin'"
+                            class="btn wlt-c-furg-btn-primary" [disabled]="frm.invalid" (click)="onSaveClick()"> {{isEdit ? 'Update' : 'Save'}}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

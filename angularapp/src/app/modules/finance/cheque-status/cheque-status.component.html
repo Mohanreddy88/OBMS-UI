@@ -1,0 +1,174 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <h1 class="mb-1">Cheque Status</h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+                <ol class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Finance</a></li>
+                    <li class="breadcrumb-item active">Cheque Status</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="frm" *ngIf="warningMessage ===''">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Period</mat-label>
+                        <input type="text" matInput [matDatepicker]="picker1" formControlName="ReceiptStartDate"
+                            placeholder="" autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="picker1">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>To</mat-label>
+                        <input type="text" matInput [matDatepicker]="picker2" formControlName="ReceiptEndDate"
+                            placeholder="" autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="picker2">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Bank Name</mat-label>
+                        <mat-select formControlName="bankName">
+                            <mat-option *ngFor="let d of bankList" [value]="d.Accname">{{d.Accname}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            "
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 wlt-c-furg-profile">
+                    <h2><span>Cheque Status</span></h2>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Type</mat-label>
+                        <mat-select formControlName="chequeStatus">
+                            <mat-option value="D">Deposited</mat-option>
+                            <mat-option value="P">Pending</mat-option>
+                            <mat-option value="R">Returned</mat-option>
+                            <mat-option value="C">Cancelled</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                    <mat-radio-group aria-label="Select a check status" formControlName="transType">
+                        <mat-radio-button value="R">Received</mat-radio-button>
+                        <mat-radio-button value="P">Paid-Out</mat-radio-button>
+                        <mat-radio-button value="B" disabled>Both</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                    <div class="text-left">
+                        <button class="btn wlt-c-furg-btn-primary" (click)="onSearchClick()" [disabled]="frm.invalid">
+                            Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive my-3"
+                        *ngIf="errorMessage =='' && warningMessage ==='' && dataSource?.length > 0">
+                        <table mat-table [dataSource]="dataSource" class="wlt-table table-striped" matSort
+                            (matSortChange)="announceSortChange($event)">
+
+                            <!-- Select Column -->
+                            <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef>Select</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-checkbox (change)="toggleSelection(element.ID, $event.checked)"></mat-checkbox>
+                                </td>
+                            </ng-container>
+
+                            <!-- Cheque Date Column -->
+                            <ng-container matColumnDef="chequeDate">
+                                <th mat-header-cell *matHeaderCellDef>Cheque Date</th>
+                                <td mat-cell *matCellDef="let element">{{ element.ChequeDate | date: 'dd-MMM-yyyy' }}
+                                </td>
+                            </ng-container>
+
+                            <!-- Cheque No Column -->
+                            <ng-container matColumnDef="chequeNo">
+                                <th mat-header-cell *matHeaderCellDef>Cheque No</th>
+                                <td mat-cell *matCellDef="let element">{{ element.ChequeNo }}</td>
+                            </ng-container>
+
+                            <!-- Amount Column -->
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef>Amount</th>
+                                <td mat-cell *matCellDef="let element">{{ element.Amount }}</td>
+                            </ng-container>
+
+                            <!-- Particulars Column -->
+                            <ng-container matColumnDef="particulars">
+                                <th mat-header-cell *matHeaderCellDef>Particulars</th>
+                                <td mat-cell *matCellDef="let element">{{ element.Particulars }}</td>
+                            </ng-container>
+
+                            <!-- Header & Row Definitions -->
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-3" *ngIf="frm.get('chequeStatus')?.value === 'P'">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Clearence Date</mat-label>
+                        <input type="text" formControlName="clearence_date" matInput [matDatepicker]="picker3"
+                            placeholder="" autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="picker3">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker3></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                    <div class="text-left">
+                        <button
+                            *ngIf="this.userAccessModel.createAccess == true ||this.userAccessModel.updateAccess == true || currentUser == 'superadmin'"
+                            class="btn wlt-c-furg-btn-primary" [disabled]="dataSource?.length <= 0"
+                            (click)="onSubmitClick()"> {{ frm.get('chequeStatus')?.value == 'D' ? 'Return' :
+                            'Deposite' }}</button>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="warningMessage !==''">
+                <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+            </div>
+            <div *ngIf="errorMessage !==''">
+                <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+            </div>
+        </form>
+        <div *ngIf="warningMessage !==''">
+            <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+        </div>
+        <div *ngIf="errorMessage !==''">
+            <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+        </div>
+    </mat-card-content>
+</mat-card>
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+    style="margin-top: -20.5rem; display: block; margin-left: -6.5rem;">
+    <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+    </div>
+</div>
+<!-- model pop up for logic ended -->

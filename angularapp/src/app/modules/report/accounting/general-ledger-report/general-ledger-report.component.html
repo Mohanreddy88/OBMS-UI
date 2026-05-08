@@ -1,0 +1,61 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+          <h1 class="mb-1">Report/ Accounting /General Ledger</h1>
+        </div>
+        <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+          <ol class="breadcrumb float-md-right">
+           <li class="breadcrumb-item"><a routerLink="/dashboard">Report</a></li>
+            <li class="breadcrumb-item active">General Ledger</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <mat-card>
+    <mat-card-content>
+  
+      <form [formGroup]="frm" (ngSubmit)="onSubmit()">       
+        <div class="row" *ngIf="warningMessage ===''">
+          <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+            <mat-form-field appearance="outline">
+                <mat-label>Branch</mat-label>
+                <mat-select formControlName="Branchcode" [panelClass]="'custom-dropdown-panel'">
+                  <mat-option [value]="0"></mat-option>
+                  <mat-option *ngFor="let d of branchList" value="{{d.Code}}">{{d.Code}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+        </div>
+        <div class="row" *ngIf="warningMessage ===''">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2">
+                <mat-form-field appearance="outline">
+                    <mat-label class="mr-3">Year Period</mat-label>
+                    <mat-select  [value]="selectedYear" (selectionChange)="onYearChange($event)">
+                        <mat-option *ngFor="let year of taxYears" [value]="year">
+                            {{ year }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+          <div class="col-12 col-sm-12 col-md-4 col-lg-1 text-right">
+            <div class="btn-group" role="group">
+              <button class="btn wlt-c-furg-btn-primary m-1"> Show</button>
+            </div>
+          </div>
+        </div> 
+      </form>
+      <br />
+      <div *ngIf="warningMessage !==''">
+          <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+      </div>
+      <div *ngIf="errorMessage !==''">
+          <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+      </div>
+      <br/>
+      <iframe width="1200px" height="1200px" #myFrame [src]="urlSafe"></iframe>
+    </mat-card-content>
+  </mat-card>
+  <p>general-ledger-report works!</p>

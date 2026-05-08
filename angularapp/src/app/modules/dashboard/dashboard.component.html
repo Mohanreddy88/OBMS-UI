@@ -1,0 +1,175 @@
+<!-- ===================== -->
+<!-- ORIGINAL HEADER (UNCHANGED) -->
+<!-- ===================== -->
+<div class="wlt-c-furg-content-header" *ngIf="(menuName != 'finance')">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+        <h1 class="mb-1">Dashboard</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-1">
+        <ol class="breadcrumb float-md-right">
+          <li class="breadcrumb-item">
+            <a routerLink="/dashboard">Dashboard</a>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================== -->
+<!-- 🔔 NEW SYSTEM NOTICE -->
+<!-- ===================== -->
+<div class="container-fluid mb-3" *ngIf="menuName != 'finance'">
+  <div class="alert alert-info shadow-sm border-0 d-flex align-items-center" role="alert"
+    style="border-left:5px solid #0d6efd; border-radius:10px;">
+    <i class="fas fa-rocket mr-3" style="font-size:22px;"></i>
+    <div>
+      <strong>Welcome to the New OBMS System – FREIGHTWATCH G PATOMOTOH SECURITY SERVICES SDN. BHD.</strong><br>
+      OBMS is now faster, more secure, and easier to use.<br>
+      Legacy modules remain available for any features not yet migrated.
+    </div>
+  </div>
+</div>
+
+<!-- ===================== -->
+<!-- ✨ WHAT’S IMPROVED SECTION -->
+<!-- ===================== -->
+<div class="container-fluid mb-4" *ngIf="menuName != 'finance'">
+  <mat-card class="shadow-sm">
+    <mat-card-header>
+      <mat-card-title>
+        <i class="fas fa-star text-primary mr-2"></i>
+        What’s Improved in the New OBMS?
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="improvement-list">
+            <li>⚡ Faster system performance</li>
+            <li>🔒 Enhanced data security</li>
+            <li>🖥 Modern and easier-to-use interface</li>
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <ul class="improvement-list">
+            <li>📊 Improved dashboard and reports</li>
+            <li>🔍 Better search and navigation</li>
+            <li>🚀 Continuous feature upgrades coming soon</li>
+          </ul>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- ===================== -->
+<!-- 🖥 LEGACY SYSTEM CARD -->
+<!-- ===================== -->
+<div class="container-fluid mb-4" *ngIf="menuName != 'finance'">
+  <mat-card class="shadow-sm legacy-card">
+    <mat-card-header>
+      <mat-card-title>
+        <i class="fas fa-history mr-2 text-warning"></i>
+        Access Old OBMS (Legacy System)
+      </mat-card-title>
+      <mat-card-subtitle>
+        Use this link if you need features not yet migrated.
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="row">
+
+        <div class="col-md-6 mb-3">
+          <div class="legacy-link-box">
+            <h6>Old OBMS Main Portal</h6>
+            <p class="small text-muted">
+              Login to the previous OBMS system
+            </p>
+            <a href="https://124.217.236.37/FWG2015/OBMSLogin.aspx?ReturnUrl=%2fFWG2015%2fDefault.aspx" target="_blank"
+              class="btn btn-outline-primary btn-sm">
+              Payroll
+            </a>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <div class="legacy-link-box">
+            <h6>Finance Module</h6>
+            <p class="small text-muted">
+              Login to the Finance Module </p>
+            <a href="https://124.217.236.37/FWG24/OBMSLogin.aspx?ReturnUrl=%2fFWG2015%2fDefault.aspx" target="_blank"
+              class="btn btn-outline-primary btn-sm">
+              Finance
+            </a>
+          </div>
+        </div>
+
+        <!-- <div class="col-md-6 mb-3">
+          <div class="legacy-link-box">
+            <h6>Archived Reports</h6>
+            <p class="small text-muted">
+              Access historical and archived data
+            </p>
+            <button class="btn btn-outline-secondary btn-sm" disabled>
+              Coming Soon
+            </button>
+          </div>
+        </div> -->
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- ===================== -->
+<!-- 🖥 LEGACY REPORT CARD -->
+<!-- ===================== -->
+
+<div class="wlt-c-furg-content-header" *ngIf="(menuName === 'finance')">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+        <h1 class="mb-1">Report/Payment Due List</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 my-1">
+        <ol class="breadcrumb float-md-right">
+          <li class="breadcrumb-item">
+            <a routerLink="/dashboard">Report</a>
+          </li>
+          <li class="breadcrumb-item active">
+            Payment Due List
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================== -->
+<!-- FINANCE REPORT SECTION (UNCHANGED) -->
+<!-- ===================== -->
+<mat-card *ngIf="menuName == 'finance'" class="report-card full-width-report">
+  <mat-card-content>
+    <br />
+
+    <div *ngIf="warningMessage !== ''">
+      <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+    </div>
+
+    <div *ngIf="errorMessage !== ''">
+      <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+    </div>
+
+    <iframe *ngIf="urlSafe" class="report-wrapper fixed-height" [src]="urlSafe">
+    </iframe>
+
+  </mat-card-content>
+</mat-card>

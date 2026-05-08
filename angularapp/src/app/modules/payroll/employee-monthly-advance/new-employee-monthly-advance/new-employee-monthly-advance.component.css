@@ -1,0 +1,45 @@
+.amount-row {
+    max-width: 80px; /* Adjust the value as needed */
+}
+.particular-row {
+    max-width: 60px; /* Adjust the value as needed */
+}
+.paymode-row {
+    max-width: 60px; /* Adjust the value as needed */
+}
+
+.custom-row {
+    max-width: 150px; /* Adjust the value as needed */
+}
+
+.set-button {
+    margin-left: -10px;
+    margin-top: 5px;
+}
+.set-button-error{
+    margin-left: 10px;
+}
+.row-default {
+    background-color: #FFFFC0; /* Color for default rows */
+}
+.row-alternate {
+    background-color: #FFFFC0; /* Color for alternate rows */
+}
+.custom-row {
+    padding: 0px !important; /* Forces smaller padding */
+}
+
+.mat-form-field {
+    margin: 1px !important; /* Removes any margin */
+}
+
+.mat-form-field-wrapper {
+    padding: 0px !important; /* Reduces padding inside form fields */
+}
+
+tr {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important; /* Reduces row height */
+}
+

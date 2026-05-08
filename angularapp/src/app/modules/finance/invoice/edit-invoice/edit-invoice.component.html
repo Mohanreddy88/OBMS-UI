@@ -1,0 +1,130 @@
+<p class="close" (click)="closePopup()">
+    <mat-icon class="close-icon" >close</mat-icon>
+</p>
+<h1 mat-dialog-title>Edit Invoice</h1>
+<form [formGroup]="frm" (ngSubmit)="onSubmit()">
+    <mat-dialog-content>
+            <div class="col-12" formGroupName="details">
+                <div class="table-responsive">
+                    <table class="mat-table wlt-table wlt-new-agreement">
+                        <thead>
+                            <tr class="mat-header-row">
+                                <th class="mat-header-cell">Guards</th>
+                                <th class="mat-header-cell">Rate/Hour</th>
+                                <th class="mat-header-cell">Working Hours</th>
+                                <th class="mat-header-cell">Working Days</th>
+                                <th class="mat-header-cell">Tax</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="mat-row">
+                                <td class="mat-cell">
+                                    <mat-form-field appearance="outline">
+                                        <input type="text" formControlName="NoOfGuards" matInput placeholder=""
+                                            autocomplete="off">
+                                    </mat-form-field>
+                                </td>
+                                <td class="mat-cell">
+                                    <mat-form-field appearance="outline">
+                                        <input type="text" formControlName="Rate" matInput placeholder=""
+                                            autocomplete="off">
+                                    </mat-form-field>
+                                </td>
+                                <td class="mat-cell">
+                                    <mat-form-field appearance="outline">
+                                        <input type="text" formControlName="NoOfHours" matInput placeholder=""
+                                            autocomplete="off">
+                                    </mat-form-field>
+                                </td>
+                                <td class="mat-cell">
+                                    <mat-form-field appearance="outline">
+                                        <input type="text" formControlName="NoOfDays" matInput placeholder=""
+                                            autocomplete="off">
+                                    </mat-form-field>
+                                </td>
+                                <td class="mat-cell">
+                                    <mat-checkbox formControlName="IsTaxable"></mat-checkbox>
+                                </td>
+                            </tr>
+                            <tr class="mat-row">
+                                <th class="mat-cell" colspan="13">
+                                    <span class="btn wlt-c-furg-btn-primary mr-3"  (click)="addItemDetails('add')">Add</span>
+                                    <span class="btn wlt-c-furg-btn-secondary mr-3" (click)="addItemDetails('update')">Update</span>
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="table-responsive">
+                        <table mat-table [dataSource]="dataSource" class="wlt-table table-striped" matSort>
+                            <ng-container matColumnDef="ID">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                                <td mat-cell *matCellDef="let element" class="text-left"> {{element.ID}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="ClientInvoiceID">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Client Invoice ID </th>
+                                <td mat-cell *matCellDef="let element" class="text-left"> {{element.ClientInvoiceID}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="NoOfGuards">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Guards </th>
+                                <td mat-cell *matCellDef="let element" class="text-left"> {{element.NoOfGuards}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Rate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Rate/Hour </th>
+                                <td mat-cell *matCellDef="let element" class="text-left"> {{element.Rate}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="NoOfHours">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Working Hours </th>
+                                <td mat-cell *matCellDef="let element" class="text-left"> {{element.NoOfHours}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="NoOfDays">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>  Working Days  </th>
+                                <td mat-cell *matCellDef="let element" class="text-left"> {{element.NoOfDays}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="IsTaxable">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tax </th>
+                                <td mat-cell *matCellDef="let element" class="text-left"> {{element.IsTaxable}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="action" stickyEnd>
+                                <th mat-header-cell *matHeaderCellDef style="text-align:center; width: 120px;">
+                                    Action
+                                </th>
+                                <td mat-cell *matCellDef="let row; let index = index" style="text-align:center;">
+                                    <a style="cursor:pointer;" class="wlt-c-furg-text-primary mr-2" matTooltip="Edit"><mat-icon aria-hidden="false" aria-label="edit icon" (click)="editRow(row,index)">edit</mat-icon></a>
+                                    <!-- <a style="cursor:pointer;" class="wlt-c-furg-text-success mr-2" matTooltip="View"><mat-icon aria-hidden="false" aria-label="view icon">visibility</mat-icon></a> -->
+                                    <a style="cursor:pointer;" class="wlt-c-furg-text-danger" matTooltip="Delete"><mat-icon aria-hidden="false" aria-label="trash icon" (click)="deleteRow(row,index)">delete_outline</mat-icon></a>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                    </div>
+
+                    <!-- <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                        aria-label="Select page of periodic elements">
+                    </mat-paginator> -->
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Noted</mat-label>
+                        <textarea type="text" formControlName="Note" matInput placeholder=""></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <div class="row">
+            <div class="col-12">
+                <div class="text-right">
+                    <span class="btn wlt-c-furg-btn-gray mr-3" (click)="closePopup()"> Cancel</span>
+                    <button class="btn wlt-c-furg-btn-primary" [disabled]="!details || details.length === 0"> Save</button>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-actions>
+</form>

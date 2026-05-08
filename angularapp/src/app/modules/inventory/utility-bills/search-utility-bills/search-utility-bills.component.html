@@ -1,0 +1,153 @@
+<div class="wlt-c-furg-content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <h1 class="mb-1">Expenses Search</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+        <ol class="breadcrumb float-md-right">
+          <li class="breadcrumb-item"><a routerLink="/dashboard">Finance</a></li>
+          <li class="breadcrumb-item"><a [routerLink]="['/inventory/utility-bills']">Expenses</a></li>
+          <li class="breadcrumb-item active">Expenses Search</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="frm">
+  <mat-dialog-content>
+
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Branch</mat-label>
+          <mat-select formControlName="Branch" (selectionChange)="onChange()">
+            <mat-option *ngFor="let d of branchList" value="{{d.Code}}">{{d.Code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Supplier</mat-label>
+          <mat-select formControlName="Supplier" (selectionChange)="onChange()">
+            <mat-option *ngFor="let d of supplierList" value="{{d.Id}}">{{d.Name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Search Option</mat-label>
+          <mat-select formControlName="search_option" (selectionChange)="searchOptionCahnge($event)">
+
+            <mat-option value="Invoice No">
+              Invoice No
+            </mat-option>
+            <mat-option value="Invoice Date">
+              Invoice Date
+            </mat-option>
+            <mat-option value="Payment Date">
+              Payment Date
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div [hidden]="searchOption == 'Invoice No' || searchOption == 'Payment Date'"
+        class="col-12 col-sm-12 col-md-4 col-lg-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Date</mat-label>
+          <input type="text" formControlName="invoice_date" matInput [matDatepicker]="pickerInvoice" placeholder=""
+            autocomplete="off">
+          <mat-datepicker-toggle matSuffix [for]="pickerInvoice">
+          </mat-datepicker-toggle>
+          <mat-datepicker #pickerInvoice></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div [hidden]="searchOption == 'Invoice No' || searchOption == 'Invoice Date'"
+        class="col-12 col-sm-12 col-md-3 col-lg-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Date</mat-label>
+          <input type="text" formControlName="payment_date" matInput [matDatepicker]="pickerPayment" placeholder=""
+            autocomplete="off">
+          <mat-datepicker-toggle matSuffix [for]="pickerPayment">
+          </mat-datepicker-toggle>
+          <mat-datepicker #pickerPayment></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div [hidden]="searchOption == 'Payment Date' || searchOption == 'Invoice Date'"
+        class="col-12 col-sm-12 col-md-4 col-lg-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Invoice No</mat-label>
+          <input type="text" formControlName="invoice_no" matInput placeholder="" autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-12 col-md-4 col-lg-2">
+        <div class="btn-group" role="group">
+          <button type="submit" class="btn wlt-c-furg-btn-primary m-1" (click)="onSearchClick()">
+            Search</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <div class="text-right">
+          <mat-form-field appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="table-responsive my-3">
+          <table mat-table [dataSource]="dataSource" class="wlt-table table-striped" matSort
+            (matSortChange)="announceSortChange($event)">
+            <ng-container matColumnDef="s_no">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No</th>
+              <td mat-cell *matCellDef="let element; let index = index" class="text-left"> {{index + 1}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="InvoiceNo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice No</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.InvoiceNo}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Total">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.Total}} </td>
+            </ng-container>
+            <ng-container matColumnDef="InvoiceDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Date</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.InvoiceDate | date:'dd-MMM-yyyy'}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="PaymentDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Date</th>
+              <td mat-cell *matCellDef="let element" class="text-left"> {{element.PaymentDate | date:'dd-MMM-yyyy'}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="action" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef style="text-align:center; width: 120px;">
+                Action
+              </th>
+              <td mat-cell *matCellDef="let element" style="text-align:center;">
+                <a style="cursor:pointer;" class="wlt-c-furg-text-primary mr-2" matTooltip="Add"
+                  (click)="selectEmp(element)">
+                  <mat-icon aria-hidden="false" aria-label="add icon">add</mat-icon>
+                </a>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+      aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </mat-dialog-content>
+</form>

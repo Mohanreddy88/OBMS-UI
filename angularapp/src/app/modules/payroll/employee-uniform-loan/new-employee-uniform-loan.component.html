@@ -1,0 +1,328 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <h1 class="md-1">{{isEdit ? 'Edit' : 'Add'}} Employee Uniform Loan</h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+                <ol class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Payroll</a></li>
+                    <li class="breadcrumb-item"><a routerLink="/payroll/search-employee-uniform-loan">Employee Uniform
+                            Loan List</a>
+                    </li>
+                    <li class="breadcrumb-item active">Employee Uniform Loan</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="employeeUniformLoanForm" *ngIf="warningMessage =='' && formReady">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Issue Date</mat-label>
+                            <div style="display: flex; align-items: center;"> <!-- Flex container -->
+                                <input matInput [matDatepicker]="picker" formControlName="AdvanceTakenDate"
+                                    (dateChange)="changeAdvanceTakenDate('change', $event)">
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            </div>
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                        <mat-label class="mr-3"><strong>Type</strong></mat-label>
+                        <br />
+                        <mat-radio-group aria-label="Select a Type" formControlName="EmployeeType"
+                            (change)="radioButtonTypeSelectionChange($event)">
+                            <mat-radio-button value="Guard">Guard</mat-radio-button>
+                            <mat-radio-button value="Staff"
+                                [disabled]="!staffAdminAccessModel.readAccess">Staff</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-5">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Branch Code</mat-label>
+                            <mat-select formControlName="BranchCode"
+                                (keydown)="onKeyDropdown($event, 'branchSearchString', 'branchModel', 'filteredBranchList', 'Code', branchSearchSubject)"
+                                [panelClass]="'custom-dropdown-panel'"
+                                (selectionChange)="onBranchSelectionChange($event)">
+                                <mat-option [value]=""></mat-option>
+                                <mat-option *ngFor="let branch of branchModel" [value]="branch.Code">
+                                    {{ branch.Code }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <!-- <div class="col-12 col-sm-12 col-md-12 col-lg-5" *ngIf="isEdit == true">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Employee</mat-label>
+                            <mat-select formControlName="EmployeeID" (selectionChange)="onEmployeeChange($event)"
+                            [panelClass]="'custom-dropdown-panel'">
+                                <mat-select-trigger>
+                                    {{ employeeNameMap[employeeUniformLoanForm.get('EmployeeID')?.value] }}
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let employee of employeeListModel" [ngStyle]="{
+                                        'background-color': isEmployeeInNameList(employee.EMP_CODE) 
+                                          ? 'yellow'                                           
+                                          : 'white',
+                                        'padding': '8px 16px',
+                                        'margin-bottom': '4px'
+                                      }" [value]="employee.ID">
+                                    {{ employee.EMP_NAME }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-5" *ngIf="isEdit == false">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Employee</mat-label>
+                            <mat-select formControlName="EmployeeID" (selectionChange)="onEmployeeChange($event)"
+                            [panelClass]="'custom-dropdown-panel'">
+                                <mat-select-trigger>
+                                    {{ employeeNameMap[employeeUniformLoanForm.get('EmployeeID')?.value] }}
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let employee of employeeListModel" [ngStyle]="{
+                                        'background-color': isEmployeeInNameList(employee.EMP_CODE) 
+                                          ? 'yellow'                                           
+                                          : 'white',
+                                        'padding': '8px 16px',
+                                        'margin-bottom': '4px'
+                                      }" [value]="employee.ID">
+                                    {{ employee.EMP_NAME }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div> -->
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-5" *ngIf="isEdit == true">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Employee</mat-label>
+                            <mat-select formControlName="EmployeeID"
+                                (keydown)="onKeyDropdown($event, 'employeeSearchString', 'employeeListModel', 'filteredEmployeeList', 'EMP_NAME', employeeSearchSubject)"
+                                (selectionChange)="onEmployeeChange($event)" [panelClass]="'custom-dropdown-panel'">
+                                <!-- ✅ FIXED TRIGGER -->
+                                <mat-select-trigger>
+                                    {{
+                                    employeeNameMap?.[
+                                    employeeUniformLoanForm.get('EmployeeID')?.value
+                                    ] || ''
+                                    }}
+                                </mat-select-trigger>
+
+                                <mat-option *ngFor="let employee of employeeListModel" [ngStyle]="{
+                                    'background-color': isEmployeeInNameList(employee.EMP_CODE)
+                                        ? 'yellow'
+                                        : 'white',
+                                    'padding': '8px 16px',
+                                    'margin-bottom': '4px'
+                                    }" [value]="employee.EMP_ID">
+                                    {{ employee.EMP_NAME }}
+                                </mat-option>
+
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-5" *ngIf="isEdit == false">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Employee</mat-label>
+                            <mat-select formControlName="EmployeeID"
+                                (keydown)="onKeyDropdown($event, 'employeeSearchString', 'employeeListModel', 'filteredEmployeeList', 'EMP_NAME', employeeSearchSubject)"
+                                (selectionChange)="onEmployeeChange($event)" [panelClass]="'custom-dropdown-panel'">
+                                <!-- ✅ FIXED TRIGGER -->
+                                <mat-select-trigger>
+                                    {{
+                                    employeeNameMap?.[
+                                    employeeUniformLoanForm.get('EmployeeID')?.value
+                                    ] || ''
+                                    }}
+                                </mat-select-trigger>
+
+                                <mat-option *ngFor="let employee of employeeListModel" [ngStyle]="{
+                                    'background-color': isEmployeeInNameList(employee.EMP_CODE)
+                                        ? 'yellow'
+                                        : 'white',
+                                    'padding': '8px 16px',
+                                    'margin-bottom': '4px'
+                                    }" [value]="employee.EMP_ID">
+                                    {{ employee.EMP_NAME }}
+                                </mat-option>
+
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-5">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Voucher No</mat-label>
+                            <input type="text" formControlName="VoucherNo" matInput placeholder="" autocomplete="off"
+                                readonly="true">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-5">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Item Category Items</mat-label>
+                            <mat-select formControlName="InventoryCategoryID"
+                                (selectionChange)="onInventoryChange($event)">
+                                <mat-option *ngFor="let inventory of inventoryModel" [value]="inventory.ID">
+                                    {{ inventory.Name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div formArrayName="items">
+                <div class="table-responsive" style="width: 50%;">
+                    <table mat-table [dataSource]="dataSource" class="wlt-table table-striped" matSort
+                        (matSortChange)="announceSortChange($event)" *ngIf="dataSource">
+
+                        <ng-container matColumnDef="Name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Item Name </th>
+                            <td mat-cell *matCellDef="let element" class="text-left"> {{element.Name}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Price">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+                            <td mat-cell *matCellDef="let element" class="text-left"> {{element.Price | number:'1.2-2'
+                                }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Quantity">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
+                            <td mat-cell *matCellDef="let element; let i = index" class="text-left" [formGroupName]="i">
+                                <input type="number" min="0" formControlName="Quantity"
+                                    class="form-control form-control-sm" (input)="onQuantityChange(i)"
+                                    style="width: 80px;" />
+                            </td>
+                        </ng-container>
+
+                        <!-- Total Column -->
+                        <ng-container matColumnDef="Total">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
+                            <td mat-cell *matCellDef="let element; let i = index" class="text-left" [formGroupName]="i">
+                                {{ itemFormArray?.at(i)?.get('Total')?.value | number:'1.2-2' }}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+            </div>
+            <br />
+            <div class="col-12 col-sm-12 col-md-12 col-lg-10">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Amount </mat-label>
+                            <input type="text" formControlName="Amount" matInput placeholder="" autocomplete="off"
+                                pattern="^\d+(\.\d{1,2})?$" (change)="amountChange($event)">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>No of Installments</mat-label>
+                            <input type="text" formControlName="NoOfInstallments" matInput placeholder=""
+                                autocomplete="off" (change)="noOfInstallmentsChange($event)">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                        <mat-error *ngIf="employeeUniformLoanForm.controls['Amount'].hasError('pattern')">
+                            Only numbers with up to two decimal places are allowed.
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-5">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Monthly Repayment </mat-label>
+                            <input type="text" formControlName="MonthlyRepayment" matInput placeholder=""
+                                [readonly]="true" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-5">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Particulars </mat-label>
+                            <input type="text" formControlName="Particulars" matInput placeholder="" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-right">
+                        <button class="btn wlt-c-furg-btn-gray mr-3" mat-dialog-close
+                            (click)="clearEmployeeLoanDetails()"> Cancel</button>
+                        <!-- <button class="mr-3" [ngClass]="btnPrint ? 'wlt-c-furg-btn-primary' : 'wlt-c-furg-btn-gray'"
+                            [disabled]="!btnPrint"
+                            *ngIf="this.userAccessModel.deleteAccess == true || currentUser == 'superadmin'"
+                            (click)="OnPrintClick()"> Print</button>
+                        <button class="mr-3" [ngClass]="btnPrint ? 'wlt-c-furg-btn-primary' : 'wlt-c-furg-btn-gray'"
+                            [disabled]="!btnDelete"
+                            *ngIf="this.userAccessModel.deleteAccess == true || currentUser == 'superadmin'"
+                            (click)="onDeleteClick()"> Delete</button>
+                        <button
+                            *ngIf="(this.userAccessModel.updateAccess == true || this.userAccessModel.createAccess == true || currentUser == 'superadmin')"
+                            class="btn wlt-c-furg-btn-primary" [disabled]="employeeUniformLoanForm.invalid"
+                            (click)="savebuttonClick()"> {{advanceID == 0 ? 'Save':
+                            'Update'}}</button> -->
+
+                        <!-- Print Button -->
+                        <button class="mr-3"
+                            [ngClass]="((userRole === 'superadmin' || btnPrint) && advanceID > 0) ? 'wlt-c-furg-btn-primary' : 'wlt-c-furg-btn-gray'"
+                            [disabled]="!( (userRole === 'superadmin' || btnPrint) && advanceID > 0 )"
+                            *ngIf="canDeleteEmployee()" (click)="OnPrintClick()">
+                            Print
+                        </button>
+
+                        <!-- Delete Button -->
+                        <button class="mr-3"
+                            [ngClass]="((userRole === 'superadmin' || btnDelete) && advanceID > 0) ? 'wlt-c-furg-btn-primary' : 'wlt-c-furg-btn-gray'"
+                            [disabled]="!( (userRole === 'superadmin' || btnPrint) && advanceID > 0 )"
+                            *ngIf="canDeleteEmployee()" (click)="onDeleteClick()">
+                            Delete
+                        </button>
+
+                        <!-- Save / Update Button -->
+                        <button class="btn wlt-c-furg-btn-primary" [disabled]="employeeUniformLoanForm.invalid"
+                            *ngIf="canSaveEmployee()" (click)="savebuttonClick()">
+                            {{ advanceID == 0 ? 'Save' : 'Update' }}
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div *ngIf="warningMessage !==''">
+            <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+        </div>
+        <div *ngIf="errorMessage !==''">
+            <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+    style="margin-top: -10.5rem; display: block; margin-left: -6.5rem;">
+    <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+    </div>
+</div>
+<!-- model pop up for logic ended -->

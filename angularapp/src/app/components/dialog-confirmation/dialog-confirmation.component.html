@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Confirmation</h1>
+<form [formGroup]="frm">
+    <div mat-dialog-content>
+        <p>{{message}}</p>
+        <ng-container *ngIf="showRemarks">
+            <mat-form-field appearance="outline" class="w-full mt-3">
+                <mat-label>Reason for Deletion</mat-label>
+                <textarea matInput formControlName="DeletionRemarks"></textarea>
+            </mat-form-field>
+        </ng-container>
+
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button (click)="closeDialog()" cdkFocusInitial>No</button>
+        <button mat-button (click)="confirmDialog()" [disabled]="showRemarks && frm.invalid">Yes</button>
+    </div>
+</form>

@@ -1,0 +1,426 @@
+<div class="wlt-c-furg-content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <h1 class="mb-1">{{isEdit ? 'Edit' : 'Add'}} Agreements</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+        <ol class="breadcrumb float-md-right">
+          <li class="breadcrumb-item"><a routerLink="/dashboard">Quotation & Agreement</a></li>
+          <li class="breadcrumb-item"><a routerLink="/quotation-and-agreement/agreements">Agreements List</a></li>
+          <li class="breadcrumb-item active">{{isEdit ? 'Update' : 'New'}} Agreements</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="frm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Agreement Period</mat-label>
+            <input type="text" formControlName="AgreementDate" 
+            (dateChange)="changeAdvanceDate('change', $event)" matInput [matDatepicker]="picker1" placeholder=""
+              autocomplete="off">
+            <mat-datepicker-toggle matSuffix [for]="picker1">
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <!--          <mat-form-field appearance="outline">-->
+          <!--            <mat-label>Agreement Period</mat-label>-->
+          <!--            <input type="text" formControlName="AgreementDate" matInput [matDatepicker]="picker1"-->
+          <!--                   placeholder="" autocomplete="off" (click)="openDatePicker(picker1)">-->
+          <!--            <mat-datepicker-toggle matSuffix [for]="picker1">-->
+          <!--            </mat-datepicker-toggle>-->
+          <!--            <mat-datepicker #picker1 startView="multi-year" (monthSelected)="closeDatePicker($event, picker1)"></mat-datepicker>-->
+          <!--          </mat-form-field>-->
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Branch</mat-label>
+            <mat-select formControlName="Branch" (selectionChange)="getClientsByBranchID($event.value)">
+              <mat-option *ngFor="let d of branchList" value="{{d.Code}}">{{d.Code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Client</mat-label>
+            <mat-select formControlName="Client" (selectionChange)="checkClientStatus()">
+              <mat-option *ngFor="let d of clientList" value="{{d.Code}}">{{d.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Work Place</mat-label>
+            <input type="text" formControlName="WorkPlace" matInput placeholder="" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+          <mat-checkbox formControlName="IsValid">Valid For Current Month Only</mat-checkbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 wlt-c-furg-profile">
+          <h2><span>Detail Item</span></h2>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <button type="button" class="btn wlt-c-furg-btn-secondary mr-3" (click)="chkNormal('N')"> Normal</button>
+          <button type="button" class="btn wlt-c-furg-btn-secondary mr-3" (click)="chkLumpSum('L')"> Lump sum</button>
+          <button type="button" class="btn wlt-c-furg-btn-secondary mr-3" (click)="chkDogService('S')"> Dog
+            Service</button>
+          <button type="button" class="btn wlt-c-furg-btn-secondary mr-3" (click)="chkTrip('S')"> Trip</button>
+          <button type="button" class="btn wlt-c-furg-btn-secondary mr-3" (click)="chkBag('S')"> Bag</button>
+          <button type="button" class="btn wlt-c-furg-btn-secondary mr-3" (click)="chkHour('H')"> Hour</button>
+        </div>
+      </div>
+      <div class="mt-2">
+        <div class="table-responsive" formGroupName="details">
+          <table class="mat-table wlt-table wlt-new-agreement">
+            <thead>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">Type</th>
+                <th class="mat-header-cell">Guards</th>
+                <th class="mat-header-cell">Rate/<br />Hour</th>
+                <th class="mat-header-cell">Working<br /> Hours</th>
+                <th class="mat-header-cell">Working<br /> Days</th>
+                <th class="mat-header-cell">Follow <br />Calendar</th>
+                <th class="mat-header-cell"> Month<br /> Total</th>
+                <th class="mat-header-cell">Year<br /> Total</th>
+                <th class="mat-header-cell">Discount</th>
+                <th class="mat-header-cell">Discounted</th>
+                <th class="mat-header-cell">Tax</th>
+                <th class="mat-header-cell">Tax<br /> Amount</th>
+                <th class="mat-header-cell">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mat-row">
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline" style="width: 155px !important;">
+                    <input type="text" formControlName="Description" (input)="DetailRowChange()" matInput placeholder=""
+                      autocomplete="off">
+                  </mat-form-field>
+                  <mat-error>
+                    {{errorDescription}}
+                  </mat-error>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline" style="width: 45px !important;">
+                    <input type="text" formControlName="NoOfGuards" (input)="DetailRowChange()" matInput placeholder=""
+                      autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline" style="width: 75px !important;">
+                    <input type="text" formControlName="Rate" (input)="DetailRowChange()" matInput placeholder=""
+                      autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline" style="width: 45px !important;">
+                    <input type="text" formControlName="NoOfHours" (input)="DetailRowChange()" matInput placeholder=""
+                      autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline" style="width: 45px !important;">
+                    <input type="text" formControlName="NoOfDays" (input)="DetailRowChange()" matInput placeholder=""
+                      autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-checkbox formControlName="FollowCalender" (change)="changeFollowCalender($event)"></mat-checkbox>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline">
+                    <input type="text" formControlName="MonthTotal" (input)="DetailRowChange()" matInput placeholder=""
+                      autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline">
+                    <input type="text" formControlName="YearTotal" matInput placeholder="" autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell" style="width: 40px !important;">
+                  <mat-checkbox formControlName="HasDiscount" (input)="DetailRowChange()"></mat-checkbox>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline" style="width: 90px !important;">
+                    <input type="text" formControlName="DiscountAmount" matInput placeholder="" autocomplete="off"
+                      (input)="DetailRowChange()">
+                  </mat-form-field>
+                  <!-- Space between fields -->
+                  <div style="height: 8px;"></div>
+                  <mat-form-field appearance="outline" style="width: 90px !important;">
+                    <mat-label style="font-weight: 700;">Hours</mat-label>
+                    <input type="text" formControlName="DiscountHour" matInput placeholder="" autocomplete="off"
+                      (input)="DetailRowChange()">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-checkbox formControlName="IsTaxable" (change)="DetailRowChange()"></mat-checkbox>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline">
+                    <input type="text" formControlName="TaxAmount" matInput placeholder="" autocomplete="off">
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell">
+                  <mat-form-field appearance="outline">
+                    <input type="text" formControlName="total" matInput placeholder="" autocomplete="off">
+                  </mat-form-field>
+                </td>
+              </tr>
+              <tr class="mat-header-row">
+                <th class="mat-header-cell" colspan="2">Category</th>
+                <th class="mat-header-cell" colspan="11">Reason</th>
+              </tr>
+              <tr class="mat-row">
+                <td class="mat-cell" colspan="2">
+                  <mat-form-field appearance="outline">
+                    <mat-select formControlName="Category">
+                      <mat-option value="">
+                        Select Category
+                      </mat-option>
+                      <mat-option value="Guard Absent">
+                        Guard Absent
+                      </mat-option>
+                      <mat-option value="Discount (Item Lost)">
+                        Discount (Item Lost)
+                      </mat-option>
+                      <mat-option value="Discount">
+                        Discount
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td class="mat-cell" colspan="11">
+                  <mat-form-field appearance="outline">
+                    <input type="text" formControlName="Reason" matInput placeholder="" autocomplete="off">
+                  </mat-form-field>
+                </td>
+              </tr>
+              <tr class="mat-row">
+                <th class="mat-cell" colspan="13">
+                  <button class="btn wlt-c-furg-btn-primary mr-3" mat-dialog-close
+                    (click)="addItemDetails('add')">Add</button>
+                  <button class="btn wlt-c-furg-btn-secondary mr-3" mat-dialog-close
+                    (click)="addItemDetails('update')">Update</button>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+
+          <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" class="wlt-table table-striped wlt-new-agreement" matSort>
+              <ng-container matColumnDef="Description">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Type</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.Description}} </td>
+              </ng-container>
+              <ng-container matColumnDef="NoOfGuards">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Guards</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.NoOfGuards}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Rate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Rate/Hour</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.Rate | number:'1.4-4' }} </td>
+              </ng-container>
+              <ng-container matColumnDef="NoOfHours">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Working Hours</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.NoOfHours}} </td>
+              </ng-container>
+              <ng-container matColumnDef="NoOfDays">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Working Days</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.NoOfDays}} </td>
+              </ng-container>
+              <ng-container matColumnDef="FollowCalender">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Follow Calendar</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.FollowCalender}} </td>
+              </ng-container>
+              <ng-container matColumnDef="MonthTotal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Month Total</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.MonthTotal | number:'1.2-2'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="YearTotal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Year Total</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.YearTotal | number:'1.2-2'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="HasDiscount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Discount</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.HasDiscount}} </td>
+              </ng-container>
+              <ng-container matColumnDef="DiscountAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Discounted</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.DiscountAmount | number:'1.2-2'}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="DiscountHour">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Disc.Hour</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.DiscountHour}} </td>
+              </ng-container>
+              <ng-container matColumnDef="IsTaxable">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tax</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.IsTaxable}} </td>
+              </ng-container>
+              <ng-container matColumnDef="TaxAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tax Amount</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.TaxAmount | number:'1.2-2'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="total">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Total</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.total | number:'1.2-2'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Category">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Category</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.Category}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Reason">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Reason</th>
+                <td mat-cell *matCellDef="let element" class="text-left"> {{element.Reason}} </td>
+              </ng-container>
+              <ng-container matColumnDef="action" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef style="text-align:center; width: 120px;">
+                  Action
+                </th>
+                <td mat-cell *matCellDef="let row" style="text-align:center;">
+                  <a *ngIf="(this.userAccessModel.readAccess == true || this.userAccessModel.updateAccess == true) || currentUser == 'superadmin'"
+                    style="cursor:pointer;" class="wlt-c-furg-text-primary mr-2" matTooltip="Edit"
+                    (click)="editRow(row)">
+                    <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>
+                  </a>
+                  <!-- <a style="cursor:pointer;" class="wlt-c-furg-text-success mr-2" matTooltip="View"><mat-icon aria-hidden="false" aria-label="view icon">visibility</mat-icon></a> -->
+                  <a *ngIf="this.userAccessModel.deleteAccess == true || currentUser == 'superadmin'"
+                    style="cursor:pointer;" class="wlt-c-furg-text-danger" matTooltip="Delete"
+                    (click)="deleteRow(row)">
+                    <mat-icon aria-hidden="false" aria-label="trash icon">delete_outline</mat-icon>
+                  </a>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+
+          <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+              aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Noted</mat-label>
+            <textarea type="text" formControlName="Note" matInput placeholder=""></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="text-right">
+            <button class="btn wlt-c-furg-btn-gray mr-3"> Cancel</button>
+            <button
+              *ngIf="(this.userAccessModel.createAccess == true || this.userAccessModel.updateAccess == true) || currentUser == 'superadmin'"
+              class="btn wlt-c-furg-btn-primary"> {{isEdit ? 'Update' :
+              'Save'}}</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div>
+      <div class="table-responsive mt-3">
+        <table mat-table [dataSource]="agreementDataSource" class="wlt-table table-striped wlt-new-agreement" matSort #sort2="matSort"
+          (matSortChange)="announceSortChange($event)">
+          <!--                <ng-container matColumnDef="ID">-->
+          <!--                    <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No. </th>-->
+          <!--                    <td mat-cell *matCellDef="let element" class="text-left"> {{element.ID}} </td>-->
+          <!--                </ng-container>-->
+          <ng-container matColumnDef="BranchName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Branch Name</th>
+            <td mat-cell *matCellDef="let element" class="text-left"> {{element.BranchName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="ClientName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Client Name</th>
+            <td mat-cell *matCellDef="let element" class="text-left"> {{element.ClientName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="WorkPlace">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Work Place</th>
+            <td mat-cell *matCellDef="let element" class="text-left"> {{element.WorkPlace}} </td>
+          </ng-container>
+          <ng-container matColumnDef="AgreementDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Start</th>
+            <td mat-cell *matCellDef="let element" class="text-left"> {{returnDate(element.AgreementDate)}} </td>
+          </ng-container>
+          <ng-container matColumnDef="action" stickyEnd>
+            <th mat-header-cell *matHeaderCellDef style="text-align:center; width: 120px;">
+              Action
+            </th>
+            <td mat-cell *matCellDef="let row" style="text-align:center;">
+              <a *ngIf="this.userAccessModel.updateAccess == true|| currentUser == 'superadmin'" style="cursor:pointer;"
+                class="wlt-c-furg-text-primary mr-2" matTooltip="Edit"><mat-icon aria-hidden="false"
+                  aria-label="edit icon" (click)="onEditClick(row)">edit</mat-icon>
+              </a>
+              <!-- <a style="cursor:pointer;" class="wlt-c-furg-text-success mr-2" matTooltip="View"><mat-icon aria-hidden="false" aria-label="view icon">visibility</mat-icon></a> -->
+              <!-- <a style="cursor:pointer;" class="wlt-c-furg-text-danger" matTooltip="Delete"><mat-icon
+                      aria-hidden="false" aria-label="trash icon">delete_outline</mat-icon></a> -->
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="agreementDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: agreementDisplayedColumns;"></tr>
+        </table>
+      </div>
+
+      <mat-paginator #paginator2 [pageSizeOptions]="pageSizeOptionsAgreement" showFirstLastButtons
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+<!--<script language="javascript">-->
+<!--  function DetailRowChange()-->
+<!--{-->
+<!--  var vMonthTotal=0;-->
+<!--  if (parseInt("0" + document.all("ObmsMainContent_txtNoOfGuards").value,10) ==0) {-->
+<!--    vMonthTotal =document.all("ObmsMainContent_txtRate").value * document.all("ObmsMainContent_txtNoOfDays").value;-->
+<!--  }-->
+<!--  else {-->
+<!--    vMonthTotal = (document.all("ObmsMainContent_txtNoOfGuards").value * document.all("ObmsMainContent_txtRate").value * document.all("ObmsMainContent_txtNoOfHours").value *document.all("ObmsMainContent_txtNoOfDays").value);-->
+<!--  }-->
+<!--  if (!(parseInt("0" + document.all("ObmsMainContent_txtNoOfGuards").value,10) ==0 || parseInt("0" + document.all("ObmsMainContent_txtRate").value,10) ==0 || parseInt("0" + document.all("ObmsMainContent_txtNoOfHours").value,10) ==0 || parseInt("0" + document.all("ObmsMainContent_txtNoOfDays").value,10) ==0)) {-->
+<!--    document.all("ObmsMainContent_txtTotalMonth").value=formatCurrency(vMonthTotal);-->
+<!--  }-->
+<!--  else {-->
+<!--    vMonthTotal = document.all("ObmsMainContent_txtTotalMonth").value;-->
+<!--  }-->
+<!--  document.all("ObmsMainContent_txtTotalYear").value=formatCurrency(vMonthTotal * 12) ;if (document.all("ObmsMainContent_chkTax").checked)-->
+<!--  document.all("ObmsMainContent_txtTaxAmount").value=formatCurrency((vMonthTotal - document.all("ObmsMainContent_txtDiscount").value * 1) * (6/100)) ;-->
+<!--else-->
+<!--  document.all("ObmsMainContent_txtTaxAmount").value="";-->
+<!--  var vDiscount = document.all("ObmsMainContent_txtDiscount").value * 1;-->
+<!--  if (!document.all("ObmsMainContent_chkDiscount").checked)-->
+<!--    vDiscount = 0;-->
+<!--  if (document.all("ObmsMainContent_chkTax").checked)-->
+<!--    document.all("ObmsMainContent_txtSubTotal").value=formatCurrency((vMonthTotal -vDiscount) * (106/100)) ;else-->
+<!--    document.all("ObmsMainContent_txtSubTotal").value=formatCurrency(vMonthTotal-vDiscount);}-->
+<!--function SetNoOfDays()-->
+<!--{-->
+<!--  var i=31;-->
+<!--  for(i=31;i>=1;i&#45;&#45;)-->
+<!--  {-->
+<!--    var vNewDate = Date.parseDate(document.all("ObmsMainContent_txtAgreementDate").value,"%b-%Y");-->
+<!--    vNewDate.setDate(i);-->
+<!--    if (vNewDate.getDate()==i)break;-->
+<!--  }-->
+<!--  document.all("ObmsMainContent_txtNoOfDays").value=i;DetailRowChange();-->
+<!--}-->
+<!--</script>-->

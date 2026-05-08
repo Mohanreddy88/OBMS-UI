@@ -1,0 +1,21 @@
+.text-danger {
+  color: red;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  /* Bootstrap red */
+  color: white;
+}
+
+.btn-print {
+  background-color: #17a2b8;
+  /* Bootstrap info/light blue */
+  color: white;
+}
+
+.cheque-hint {
+  font-weight: bold;
+  font-size: 14px;
+  /* increase as needed */
+}

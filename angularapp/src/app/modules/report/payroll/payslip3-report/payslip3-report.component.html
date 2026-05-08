@@ -1,0 +1,122 @@
+<div class="wlt-c-furg-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <h1 class="md-1">Payslip III & Time Sheet III</h1>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+                <ol class="breadcrumb float-md-right">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Report</a></li>
+                    <li class="breadcrumb-item">Payslip III
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-card class="report-card">
+    <mat-card-content>
+        <form [formGroup]="payslipForm">
+            <div class="row" *ngIf="warningMessage ===''">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-2">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Salary Period</mat-label>
+                        <div style="display: flex; align-items: center;">
+                            <input matInput [matDatepicker]="picker" formControlName="AdvanceDate"
+                                (dateChange)="changeAdvanceDate('change', $event)">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        </div>
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Branch Code</mat-label>
+                        <mat-select formControlName="BranchCode"
+                            (keydown)="onKeyDropdown($event, 'branchSearchString', 'branchModel', 'filteredBranchList', 'Code', branchSearchSubject)"
+                            (selectionChange)="onBranchSelectionChange($event)" [panelClass]="'custom-dropdown-panel'">
+                            <mat-option [value]=""></mat-option>
+                            <mat-option *ngFor="let branch of branchModel" [value]="branch.Code">
+                                {{ branch.Code }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4" *ngIf="errorMessage !==''">
+                    <mat-label style="color:red">{{errorMessage}}</mat-label>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12" *ngIf="warningMessage ===''">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+                        <mat-label class="mr-3"><strong>Employee Type</strong></mat-label>
+                        <br />
+                        <mat-radio-group aria-label="Select a Type" formControlName="EmployeeType"
+                            (change)="radioButtonTypeSelectionChange($event)">
+                            <mat-radio-button value="Guard">Guard</mat-radio-button>
+                            <mat-radio-button value="Staff">Staff</mat-radio-button>
+                            <mat-radio-button value="FGuard">Foreign Guard</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-2">
+                        <button class="btn wlt-c-furg-btn-primary m-1" (click)="generateExcelFileClick()">Generate Excel
+                            File</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4" *ngIf="warningMessage ===''">
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee</mat-label>
+                    <mat-select formControlName="EmployeeCode"
+                        (keydown)="onKeyDropdown($event, 'employeeSearchString', 'employeeListModel', 'filteredEmployeeList', 'EMP_NAME', employeeSearchSubject)"
+                        [panelClass]="'custom-dropdown-panel'">
+                        <mat-option [value]=""></mat-option>
+                        <mat-option *ngFor="let employee of employeeListModel" [ngStyle]="{
+                            'background-color': isEmployeeInNameList(employee.EMP_CODE) 
+                              ? 'yellow' 
+                              : isEmployeeProcessList(employee.EMP_CODE) 
+                              ? 'red' 
+                              : 'white',
+                            'padding': '8px 16px',
+                            'margin-bottom': '4px'
+                          }" [value]="employee.EMP_CODE">
+                            {{ employee.EMP_NAME }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="row" *ngIf="warningMessage ===''">
+                <div class="col-12">
+                    <div class="text-right">
+                        <div class="btn-group" role="group">
+                            <button class="btn wlt-c-furg-btn-primary mx-1" [disabled]="payslipForm.invalid"
+                                (click)="getPayslipReport2Click()">Payslip III </button>
+                            <button class="btn wlt-c-furg-btn-primary mx-1" [disabled]="payslipForm.invalid"
+                                (click)="getNewPayslipReportClick()">Payslip(New) </button>
+                            <button class="btn wlt-c-furg-btn-primary mx-1" [disabled]="payslipForm.invalid"
+                                (click)="getTimeSheetReportClick()">TimeSheet </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <br />
+        <div *ngIf="warningMessage !==''">
+            <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+        </div>
+        <div *ngIf="errorMessage !==''">
+            <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+        </div>
+        <iframe class="report-wrapper fixed-height" *ngIf="warningMessage ===''" [src]="urlSafe"></iframe>
+    </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+    style="margin-top: -10.5rem; display: block; margin-left: -6.5rem;">
+    <div class="d-flex justify-content-center">
+        <span class="loader"></span>
+    </div>
+</div>
+<!-- model pop up for logic ended -->

@@ -1,0 +1,100 @@
+<div class="wlt-c-furg-content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+        <h1 class="mb-1">Report/Yearly Pay Sheet Report</h1>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-8 my-1">
+        <ol class="breadcrumb float-md-right">
+          <li class="breadcrumb-item"><a routerLink="/dashboard">Report</a></li>
+          <li class="breadcrumb-item active">Yearly Pay Sheet Report</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-card class="report-card full-width-report">
+  <mat-card-content>
+
+    <form [formGroup]="frm" (ngSubmit)="onSubmit()">
+      <div class="row" *ngIf="warningMessage ===''">
+        <div class="col-12 col-sm-12 col-md-4 col-lg-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Salary Year</mat-label>
+            <mat-select formControlName="Period" [panelClass]="'custom-dropdown-panel'">
+              <mat-option *ngFor="let d of yearList" [value]="d">{{d}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Branch</mat-label>
+            <mat-select formControlName="Branch"
+              (keydown)="onKeyDropdown($event, 'branchSearchString', 'branchList', 'filteredBranchList', 'Code', branchSearchSubject)"
+              [panelClass]="'custom-dropdown-panel'" [panelClass]="'custom-dropdown-panel'">
+              <mat-option [value]="0" class="highlight-option"></mat-option>
+              <mat-option *ngFor="let d of branchList" value="{{d.Code}}">{{d.Code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-6"></div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3">
+          <mat-label class="mr-3"><strong>Employee Type</strong></mat-label>
+          <br />
+          <mat-radio-group aria-label="Select a Type" formControlName="EmployeeType">
+            <mat-radio-button value="Guard">Guard</mat-radio-button>
+            <mat-radio-button value="Staff">Staff</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-2">
+          <button class="btn wlt-c-furg-btn-primary m-1" (click)="generateExcelFileClick()">Generate Excel File</button>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <mat-radio-group aria-label="Select a Type" formControlName="RepOption">
+            <mat-radio-button value="0">All</mat-radio-button>
+            <mat-radio-button value="1">Bank</mat-radio-button>
+            <mat-radio-button value="2">Cash</mat-radio-button>
+            <mat-radio-button value="3">Cheque</mat-radio-button>
+            <mat-radio-button value="4">Temporary Employee</mat-radio-button>
+            <mat-radio-button value="5">Local Employee</mat-radio-button>
+            <mat-radio-button value="6">Foreigner Employee</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div class="row" *ngIf="warningMessage ===''">
+        <div class="col-12">
+          <div class="text-right">
+            <div class="btn-group" role="group">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <button class="btn wlt-c-furg-btn-primary" (click)="clkBtn(0)"> Show</button>
+                <button class="btn wlt-c-furg-btn-primary m-1" (click)="clkBtn(2)"> Show PaySheet 4</button>
+                <button class="btn wlt-c-furg-btn-primary m-1" (click)="clkBtn(4)"> Show PaySheet W/O EPF</button>
+                <button class="btn wlt-c-furg-btn-primary m-1" (click)="clkBtn(3)"> Excel</button>
+                <button class="btn wlt-c-furg-btn-primary m-1" (click)="clkBtn(5)"> Paysheet For Guard 1</button>
+                <button class="btn wlt-c-furg-btn-primary m-1" (click)="clkBtn(6)"> Paysheet For Guard 2</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <br />
+    <div *ngIf="warningMessage !==''">
+      <mat-label style="color:red" [innerHTML]="warningMessage"></mat-label>
+    </div>
+    <div *ngIf="errorMessage !==''">
+      <mat-label style="color:red" [innerHTML]="errorMessage"></mat-label>
+    </div>
+    <iframe *ngIf="urlSafe" class="report-wrapper fixed-height" [src]="urlSafe"></iframe>
+  </mat-card-content>
+</mat-card>
+
+<!-- model pop up for logic started -->
+<div [style.display]="showLoadingSpinner ? 'block' : 'none'"
+  style="margin-top: -10.5rem; display: block; margin-left: -6.5rem;">
+  <div class="d-flex justify-content-center">
+    <span class="loader"></span>
+  </div>
+</div>
+<!-- model pop up for logic ended -->
